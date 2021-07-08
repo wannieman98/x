@@ -100,7 +100,7 @@
     "vue-router": "~3.4.3",
     "vue-template-compiler": "~2.6.10 <2.6.13"
   },
-  "prettier": "@empathy/eslint-plugin-x/prettier-config",
+  "prettier": "@empathyco/eslint-plugin-x/prettier-config",
   "gitHooks": {
     "pre-commit": "lint-staged"
   },
