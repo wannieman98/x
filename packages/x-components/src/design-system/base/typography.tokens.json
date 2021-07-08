@@ -1,0 +1,58 @@
+{
+  "size": {
+    "font": {
+      "base": {
+        "xs": {
+          "value": "12px"
+        },
+        "s": {
+          "value": "14px"
+        },
+        "m": {
+          "value": "16px"
+        },
+        "l": {
+          "value": "18px"
+        },
+        "xl": {
+          "value": "32px"
+        }
+      }
+    },
+    "line-height": {
+      "base": {
+        "s": {
+          "value": "16px"
+        },
+        "m": {
+          "value": "24px"
+        },
+        "l": {
+          "value": "32px"
+        }
+      }
+    }
+  },
+  "font": {
+    "family": {
+      "base": {
+        "value": "'Montserrat', sans-serif"
+      }
+    }
+  },
+  "number": {
+    "font-weight": {
+      "base": {
+        "light": {
+          "value": "300"
+        },
+        "regular": {
+          "value": "400"
+        },
+        "bold": {
+          "value": "600"
+        }
+      }
+    }
+  }
+}

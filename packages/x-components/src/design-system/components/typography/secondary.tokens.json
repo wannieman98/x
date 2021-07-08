@@ -1,0 +1,9 @@
+{
+  "color": {
+    "text": {
+      "secondary": {
+        "value": "{color.base.neutral.35.value}"
+      }
+    }
+  }
+}

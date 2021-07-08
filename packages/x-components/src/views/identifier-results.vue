@@ -25,7 +25,7 @@
 <script lang="ts">
   import Vue from 'vue';
   import { Component } from 'vue-property-decorator';
-  import { Result } from '@empathyco/x-types';
+  import { Result } from '@empathy/search-types';
   import BaseGrid from '../components/base-grid.vue';
   import { SearchIcon } from '../components/icons/index';
   import BaseResultLink from '../components/result/base-result-link.vue';
@@ -77,7 +77,7 @@
   }
 
   :root {
-    --x-space-gap-grid: 12px;
+    --x-size-gap-grid: 12px;
   }
 
   .x-search-box {

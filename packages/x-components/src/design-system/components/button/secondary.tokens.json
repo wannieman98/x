@@ -1,0 +1,25 @@
+{
+  "color": {
+    "background": {
+      "button": {
+        "secondary": {
+          "value": "transparent"
+        }
+      }
+    },
+    "border": {
+      "button": {
+        "secondary": {
+          "value": "{color.border.button.default.value}"
+        }
+      }
+    },
+    "text": {
+      "button": {
+        "secondary": {
+          "value": "{color.border.button.default.value}"
+        }
+      }
+    }
+  }
+}

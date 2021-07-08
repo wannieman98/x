@@ -1,0 +1,25 @@
+{
+  "color": {
+    "background": {
+      "button": {
+        "tertiary": {
+          "value": "{color.base.neutral.95.value}"
+        }
+      }
+    },
+    "border": {
+      "button": {
+        "tertiary": {
+          "value": "{color.base.neutral.70.value}"
+        }
+      }
+    },
+    "text": {
+      "button": {
+        "tertiary": {
+          "value": "{color.text.default.value}"
+        }
+      }
+    }
+  }
+}

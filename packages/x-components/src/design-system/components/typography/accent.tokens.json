@@ -1,0 +1,9 @@
+{
+  "color": {
+    "text": {
+      "accent": {
+        "value": "{color.base.auxiliary.value}"
+      }
+    }
+  }
+}

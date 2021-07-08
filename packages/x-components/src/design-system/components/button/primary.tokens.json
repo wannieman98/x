@@ -1,0 +1,25 @@
+{
+  "color": {
+    "background": {
+      "button": {
+        "primary": {
+          "value": "{color.background.button.default.value}"
+        }
+      }
+    },
+    "border": {
+      "button": {
+        "primary": {
+          "value": "{color.border.button.default.value}"
+        }
+      }
+    },
+    "text": {
+      "button": {
+        "primary": {
+          "value": "{color.text.button.default.value}"
+        }
+      }
+    }
+  }
+}

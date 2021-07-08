@@ -1,0 +1,25 @@
+{
+  "color": {
+    "background": {
+      "button": {
+        "ghost": {
+          "value": "transparent"
+        }
+      }
+    },
+    "border": {
+      "button": {
+        "ghost": {
+          "value": "transparent"
+        }
+      }
+    },
+    "text": {
+      "button": {
+        "ghost": {
+          "value": "{color.base.lead.value}"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Do not edit directly
+  Generated on Thu, 01 Jul 2021 10:45:28 GMT
+-->
+<resources>
+  <dimen name="xSizeBorderRadiusBaseNone">0.00dp</dimen>
+  <dimen name="xSizeBorderRadiusBaseS">@dimen/xSizeBase02</dimen>
+  <dimen name="xSizeBorderRadiusBasePill">99999.00dp</dimen>
+  <dimen name="xSizeBorderRadiusButtonCard">@dimen/xSizeBorderRadiusBaseS</dimen>
+  <dimen name="xSizeBorderRadiusButtonDefault">@dimen/xSizeBorderRadiusBaseNone</dimen>
+  <dimen name="xSizeBorderRadiusButtonPill">@dimen/xSizeBorderRadiusBasePill</dimen>
+  <dimen name="xSizeBorderRadiusButtonRound">@dimen/xSizeBorderRadiusBasePill</dimen>
+  <dimen name="xSizeBorderWidthBase">1.00dp</dimen>
+  <dimen name="xSizeBorderWidthButtonDefault">@dimen/xSizeBorderWidthBase</dimen>
+  <dimen name="xSizeBase10">56.00dp</dimen>
+  <dimen name="xSizeBase01">2.00dp</dimen>
+  <dimen name="xSizeBase02">4.00dp</dimen>
+  <dimen name="xSizeBase03">8.00dp</dimen>
+  <dimen name="xSizeBase04">12.00dp</dimen>
+  <dimen name="xSizeBase05">16.00dp</dimen>
+  <dimen name="xSizeBase06">24.00dp</dimen>
+  <dimen name="xSizeBase07">32.00dp</dimen>
+  <dimen name="xSizeBase08">40.00dp</dimen>
+  <dimen name="xSizeBase09">48.00dp</dimen>
+  <dimen name="xSizeFontBaseXs">12.00sp</dimen>
+  <dimen name="xSizeFontBaseS">14.00sp</dimen>
+  <dimen name="xSizeFontBaseM">16.00sp</dimen>
+  <dimen name="xSizeFontBaseL">18.00sp</dimen>
+  <dimen name="xSizeFontBaseXl">32.00sp</dimen>
+  <dimen name="xSizeFontButtonDefault">@dimen/xSizeFontText</dimen>
+  <dimen name="xSizeFontText">@dimen/xSizeFontBaseS</dimen>
+  <dimen name="xSizeFontTitle1">@dimen/xSizeFontBaseXl</dimen>
+  <dimen name="xSizeFontTitle2">@dimen/xSizeFontBaseL</dimen>
+  <dimen name="xSizeFontTitle3">@dimen/xSizeFontBaseM</dimen>
+  <dimen name="xSizeFontSmall">@dimen/xSizeFontBaseXs</dimen>
+  <dimen name="xSizeLineHeightBaseS">16.00dp</dimen>
+  <dimen name="xSizeLineHeightBaseM">24.00dp</dimen>
+  <dimen name="xSizeLineHeightBaseL">32.00dp</dimen>
+  <dimen name="xSizeLineHeightButtonDefault">@dimen/xSizeLineHeightText</dimen>
+  <dimen name="xSizeLineHeightText">@dimen/xSizeLineHeightBaseS</dimen>
+  <dimen name="xSizeLineHeightTitle1">@dimen/xSizeLineHeightBaseL</dimen>
+  <dimen name="xSizeLineHeightTitle2">@dimen/xSizeLineHeightBaseM</dimen>
+  <dimen name="xSizeLineHeightTitle3">@dimen/xSizeLineHeightBaseM</dimen>
+  <dimen name="xSizeLineHeightSmall">@dimen/xSizeLineHeightBaseS</dimen>
+  <dimen name="xSizeBorderRadiusTopLeftButtonCard">@dimen/xSizeBorderRadiusButtonCard</dimen>
+  <dimen name="xSizeBorderRadiusTopLeftButtonDefault">@dimen/xSizeBorderRadiusButtonDefault</dimen>
+  <dimen name="xSizeBorderRadiusTopLeftButtonPill">@dimen/xSizeBorderRadiusButtonPill</dimen>
+  <dimen name="xSizeBorderRadiusTopLeftButtonRound">@dimen/xSizeBorderRadiusButtonRound</dimen>
+  <dimen name="xSizeBorderRadiusTopRightButtonCard">@dimen/xSizeBorderRadiusButtonCard</dimen>
+  <dimen name="xSizeBorderRadiusTopRightButtonDefault">@dimen/xSizeBorderRadiusButtonDefault</dimen>
+  <dimen name="xSizeBorderRadiusTopRightButtonPill">@dimen/xSizeBorderRadiusButtonPill</dimen>
+  <dimen name="xSizeBorderRadiusTopRightButtonRound">@dimen/xSizeBorderRadiusButtonRound</dimen>
+  <dimen name="xSizeBorderRadiusBottomRightButtonCard">@dimen/xSizeBorderRadiusButtonCard</dimen>
+  <dimen name="xSizeBorderRadiusBottomRightButtonDefault">@dimen/xSizeBorderRadiusButtonDefault</dimen>
+  <dimen name="xSizeBorderRadiusBottomRightButtonPill">@dimen/xSizeBorderRadiusButtonPill</dimen>
+  <dimen name="xSizeBorderRadiusBottomRightButtonRound">@dimen/xSizeBorderRadiusButtonRound</dimen>
+  <dimen name="xSizeBorderRadiusBottomLeftButtonCard">@dimen/xSizeBorderRadiusButtonCard</dimen>
+  <dimen name="xSizeBorderRadiusBottomLeftButtonDefault">@dimen/xSizeBorderRadiusButtonDefault</dimen>
+  <dimen name="xSizeBorderRadiusBottomLeftButtonPill">@dimen/xSizeBorderRadiusButtonPill</dimen>
+  <dimen name="xSizeBorderRadiusBottomLeftButtonRound">@dimen/xSizeBorderRadiusButtonRound</dimen>
+  <dimen name="xSizeBorderWidthTopButtonDefault">@dimen/xSizeBorderWidthButtonDefault</dimen>
+  <dimen name="xSizeBorderWidthRightButtonDefault">@dimen/xSizeBorderWidthButtonDefault</dimen>
+  <dimen name="xSizeBorderWidthBottomButtonDefault">@dimen/xSizeBorderWidthButtonDefault</dimen>
+  <dimen name="xSizeBorderWidthLeftButtonDefault">@dimen/xSizeBorderWidthButtonDefault</dimen>
+  <dimen name="xSizePaddingTopButtonDefault">@dimen/xSizeBase04</dimen>
+  <dimen name="xSizePaddingTopButtonRound">@dimen/xSizeBase04</dimen>
+  <dimen name="xSizePaddingRightButtonDefault">@dimen/xSizeBase05</dimen>
+  <dimen name="xSizePaddingRightButtonRound">@dimen/xSizeBase04</dimen>
+  <dimen name="xSizePaddingBottomButtonDefault">@dimen/xSizeBase04</dimen>
+  <dimen name="xSizePaddingBottomButtonRound">@dimen/xSizeBase04</dimen>
+  <dimen name="xSizePaddingLeftButtonDefault">@dimen/xSizeBase05</dimen>
+  <dimen name="xSizePaddingLeftButtonRound">@dimen/xSizeBase04</dimen>
+  <dimen name="xSizeGapButtonDefault">@dimen/xSizeBase03</dimen>
+  <color name="xColorBaseLead">#ff36515b</color>
+  <color name="xColorBaseAuxiliary">#ff667981</color>
+  <color name="xColorBaseNeutral10">#ff1a1a1a</color>
+  <color name="xColorBaseNeutral35">#ff595959</color>
+  <color name="xColorBaseNeutral70">#ffb3b3b3</color>
+  <color name="xColorBaseNeutral95">#fff2f2f2</color>
+  <color name="xColorBaseNeutral100">#ffffffff</color>
+  <color name="xColorBackgroundButtonDefault">@color/xColorBaseLead</color>
+  <color name="xColorBackgroundButtonGhost">#00000000</color>
+  <color name="xColorBackgroundButtonPrimary">@color/xColorBackgroundButtonDefault</color>
+  <color name="xColorBackgroundButtonSecondary">#00000000</color>
+  <color name="xColorBackgroundButtonTertiary">@color/xColorBaseNeutral95</color>
+  <color name="xColorBorderButtonDefault">@color/xColorBackgroundButtonDefault</color>
+  <color name="xColorBorderButtonGhost">#00000000</color>
+  <color name="xColorBorderButtonPrimary">@color/xColorBorderButtonDefault</color>
+  <color name="xColorBorderButtonSecondary">@color/xColorBorderButtonDefault</color>
+  <color name="xColorBorderButtonTertiary">@color/xColorBaseNeutral70</color>
+  <color name="xColorTextButtonDefault">@color/xColorBaseNeutral100</color>
+  <color name="xColorTextButtonGhost">@color/xColorBaseLead</color>
+  <color name="xColorTextButtonPrimary">@color/xColorTextButtonDefault</color>
+  <color name="xColorTextButtonSecondary">@color/xColorBorderButtonDefault</color>
+  <color name="xColorTextButtonTertiary">@color/xColorTextDefault</color>
+  <color name="xColorTextAccent">@color/xColorBaseAuxiliary</color>
+  <color name="xColorTextDefault">@color/xColorBaseNeutral10</color>
+  <color name="xColorTextSecondary">@color/xColorBaseNeutral35</color>
+  <font name="xFontFamilyBase">@font/montserrat</font>
+  <font name="xFontFamilyButtonDefault">@font/xFontFamilyText</font>
+  <font name="xFontFamilyText">@font/xFontFamilyBase</font>
+  <font name="xFontFamilyTitle1">@font/xFontFamilyBase</font>
+  <font name="xFontFamilyTitle2">@font/xFontFamilyBase</font>
+  <font name="xFontFamilyTitle3">@font/xFontFamilyBase</font>
+  <font name="xFontFamilySmall">@font/xFontFamilyBase</font>
+  <integer name="xNumberFontWeightBaseLight">300</integer>
+  <integer name="xNumberFontWeightBaseRegular">400</integer>
+  <integer name="xNumberFontWeightBaseBold">600</integer>
+  <integer name="xNumberFontWeightButtonDefault">@integer/xNumberFontWeightBaseBold</integer>
+  <integer name="xNumberFontWeightText">@integer/xNumberFontWeightBaseRegular</integer>
+  <integer name="xNumberFontWeightTitle1">@integer/xNumberFontWeightBaseRegular</integer>
+  <integer name="xNumberFontWeightTitle2">@integer/xNumberFontWeightBaseRegular</integer>
+  <integer name="xNumberFontWeightTitle3">@integer/xNumberFontWeightBaseRegular</integer>
+  <integer name="xNumberFontWeightSmall">@integer/xNumberFontWeightBaseRegular</integer>
+  <string name="xStringTextDecorationText" translatable="false">none</string>
+  <string name="xStringTextDecorationTitle1" translatable="false">none</string>
+  <string name="xStringTextDecorationTitle2" translatable="false">none</string>
+  <string name="xStringTextDecorationTitle3" translatable="false">none</string>
+  <string name="xStringTextDecorationSmall" translatable="false">none</string>
+  
+</resources>

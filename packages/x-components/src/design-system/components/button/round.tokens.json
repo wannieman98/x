@@ -1,0 +1,67 @@
+{
+  "size": {
+    "border-radius": {
+      "button": {
+        "round": {
+          "value": "{size.border-radius.base.pill.value}"
+        }
+      }
+    },
+    "border-radius-top-left": {
+      "button": {
+        "round": {
+          "value": "{size.border-radius.button.round.value}"
+        }
+      }
+    },
+    "border-radius-top-right": {
+      "button": {
+        "round": {
+          "value": "{size.border-radius.button.round.value}"
+        }
+      }
+    },
+    "border-radius-bottom-right": {
+      "button": {
+        "round": {
+          "value": "{size.border-radius.button.round.value}"
+        }
+      }
+    },
+    "border-radius-bottom-left": {
+      "button": {
+        "round": {
+          "value": "{size.border-radius.button.round.value}"
+        }
+      }
+    },
+    "padding-top": {
+      "button": {
+        "round": {
+          "value": "{size.base.04.value}"
+        }
+      }
+    },
+    "padding-right": {
+      "button": {
+        "round": {
+          "value": "{size.base.04.value}"
+        }
+      }
+    },
+    "padding-bottom": {
+      "button": {
+        "round": {
+          "value": "{size.base.04.value}"
+        }
+      }
+    },
+    "padding-left": {
+      "button": {
+        "round": {
+          "value": "{size.base.04.value}"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "color": {
+    "text": {
+      "default": {
+        "value": "{color.base.neutral.10.value}"
+      }
+    }
+  },
+  "font": {
+    "family": {
+      "text": {
+        "value": "{font.family.base.value}"
+      },
+      "title1": {
+        "value": "{font.family.base.value}"
+      },
+      "title2": {
+        "value": "{font.family.base.value}"
+      },
+      "title3": {
+        "value": "{font.family.base.value}"
+      },
+      "small": {
+        "value": "{font.family.base.value}"
+      }
+    }
+  },
+  "string": {
+    "text-decoration": {
+      "text": {
+        "value": "none"
+      },
+      "title1": {
+        "value": "none"
+      },
+      "title2": {
+        "value": "none"
+      },
+      "title3": {
+        "value": "none"
+      },
+      "small": {
+        "value": "none"
+      }
+    }
+  },
+  "size": {
+    "font": {
+      "text": {
+        "value": "{size.font.base.s.value}"
+      },
+      "title1": {
+        "value": "{size.font.base.xl.value}"
+      },
+      "title2": {
+        "value": "{size.font.base.l.value}"
+      },
+      "title3": {
+        "value": "{size.font.base.m.value}"
+      },
+      "small": {
+        "value": "{size.font.base.xs.value}"
+      }
+    },
+    "line-height": {
+      "text": {
+        "value": "{size.line-height.base.s.value}"
+      },
+      "title1": {
+        "value": "{size.line-height.base.l.value}"
+      },
+      "title2": {
+        "value": "{size.line-height.base.m.value}"
+      },
+      "title3": {
+        "value": "{size.line-height.base.m.value}"
+      },
+      "small": {
+        "value": "{size.line-height.base.s.value}"
+      }
+    }
+  },
+  "number": {
+    "font-weight": {
+      "text": {
+        "value": "{number.font-weight.base.regular.value}"
+      },
+      "title1": {
+        "value": "{number.font-weight.base.regular.value}"
+      },
+      "title2": {
+        "value": "{number.font-weight.base.regular.value}"
+      },
+      "title3": {
+        "value": "{number.font-weight.base.regular.value}"
+      },
+      "small": {
+        "value": "{number.font-weight.base.regular.value}"
+      }
+    }
+  }
+}

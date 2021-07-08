@@ -1,0 +1,22 @@
+{
+  "size": {
+    "border-radius": {
+      "base": {
+        "none": {
+          "value": "0"
+        },
+        "s": {
+          "value": "{size.base.02.value}"
+        },
+        "pill": {
+          "value": "99999px"
+        }
+      }
+    },
+    "border-width": {
+      "base": {
+        "value": "1px"
+      }
+    }
+  }
+}

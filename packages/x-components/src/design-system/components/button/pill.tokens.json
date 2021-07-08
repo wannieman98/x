@@ -1,0 +1,39 @@
+{
+  "size": {
+    "border-radius": {
+      "button": {
+        "pill": {
+          "value": "{size.border-radius.base.pill.value}"
+        }
+      }
+    },
+    "border-radius-top-left": {
+      "button": {
+        "pill": {
+          "value": "{size.border-radius.button.pill.value}"
+        }
+      }
+    },
+    "border-radius-top-right": {
+      "button": {
+        "pill": {
+          "value": "{size.border-radius.button.pill.value}"
+        }
+      }
+    },
+    "border-radius-bottom-right": {
+      "button": {
+        "pill": {
+          "value": "{size.border-radius.button.pill.value}"
+        }
+      }
+    },
+    "border-radius-bottom-left": {
+      "button": {
+        "pill": {
+          "value": "{size.border-radius.button.pill.value}"
+        }
+      }
+    }
+  }
+}

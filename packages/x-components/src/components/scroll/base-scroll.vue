@@ -69,7 +69,7 @@
 
 <style lang="scss" scoped>
   .x-base-scroll {
-    overflow-y: var(--x-space-overflow-scroll, auto);
+    overflow-y: var(--x-size-overflow-scroll, auto);
   }
 </style>
 
@@ -102,7 +102,7 @@ movement that realize the user:
 </template>
 
 <script>
-  import { BaseScroll } from '@empathyco/x-components';
+  import { BaseScroll } from '@empathy/x-components';
 
   export default {
     name: 'ScrollTest',
@@ -156,7 +156,7 @@ Set to false the reset scroll on query change feature which is true by default.
 </template>
 
 <script>
-  import { BaseScroll } from '@empathyco/x-components';
+  import { BaseScroll } from '@empathy/x-components';
 
   export default {
     name: 'ScrollTest',

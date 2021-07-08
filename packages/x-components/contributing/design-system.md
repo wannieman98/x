@@ -30,7 +30,7 @@ We are going to follow the next levels convention to name the tokens:
 
 `[namespace]-[category]-[property]-[component]-[element]-[variant]-[state]-[scale]`
 
-Examples: `--x-color-background-button-icon-filled-hover` `--x-font-size-xs`
+Examples: `--x-color-background-button-icon-filled-hover` `--x-size-font-xs`
 
 ⚠️ Not all levels are going to be used in every token. Only the needed, and we will increase the
 tokens and its levels according to our needs.
@@ -53,8 +53,8 @@ the following categories:
 - `space`
 - ...
 
-Examples: `--x-color-text-input` `--x-color-background-button` `--x-font-size` `--x-border-radius`
-`--x-space-margin-button`
+Examples: `--x-color-text-input` `--x-color-background-button` `--x-size-font` `--x-border-radius`
+`--x-size-margin-button`
 
 ### `[property]`
 
@@ -67,8 +67,8 @@ depending on the context:
 - `width`
 - ...
 
-Examples: `--x-color-text-input` `--x-color-background-button` `--x-font-size` `--x-border-radius`
-`--x-border-width` `--x-space-margin-button`
+Examples: `--x-color-text-input` `--x-color-background-button` `--x-size-font` `--x-border-radius`
+`--x-size--border-width` `--x-size-margin-button`
 
 ### `[component]`
 
@@ -111,7 +111,7 @@ Example: `--x-color-background-button-hover` `--x-color-background-input-focus`
 
 This level is to define a scale of values. Used specially in the base tokens.
 
-Example: `--x-space-01` `--x-space-02` `--x-font-size-xs` `--x-font-size-s` `--x-font-weight-bold`
+Example: `--x-size-01` `--x-size-02` `--x-size-font-xs` `--x-size-font-s` `--x-font-weight-bold`
 
 ## Tokens Architecture
 
