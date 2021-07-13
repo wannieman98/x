@@ -1,4 +1,4 @@
 module.exports = {
   header: '# X Components',
-  ...require('@empathy/eslint-plugin-x/standard-version-config')
+  ...require('@empathyco/eslint-plugin-x/standard-version-config')
 }
