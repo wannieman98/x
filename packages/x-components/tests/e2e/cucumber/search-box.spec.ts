@@ -1,5 +1,5 @@
 import { And, Given, Then, When } from 'cypress-cucumber-preprocessor/steps';
-import { InstallXOptions } from '../../../../src/x-installer/x-installer/types';
+import { InstallXOptions } from '../../../src/x-installer/x-installer/types';
 
 let nextQueriesResults = 0;
 let resultsCount = 0;
@@ -70,13 +70,9 @@ And(
 
 // Scenario 2
 And('the number of next query results are stored', () => {
-  if (cy.$$('[data-test = "next-queries"]').length > 0) {
-    cy.getByDataTest('next-query').then($elements => {
-      nextQueriesResults = $elements.length;
-    });
-  } else {
-    nextQueriesResults = 0;
-  }
+  cy.get('body').then($body => {
+    nextQueriesResults = $body.find('[data-test="next-query"]').length;
+  });
 });
 
 And('History queries are being displayed is not {boolean}', (hideIfEqualsQuery: boolean) => {
