@@ -6,7 +6,8 @@ import { realAdapter } from '../adapter/real-adapter';
 export const baseSnippetConfig: SnippetConfig = {
   instance: 'juguettos',
   lang: 'es',
-  scope: 'x-components-development'
+  scope: 'x-components-development',
+  env: 'staging'
 };
 
 const url = new URL(location.href);
