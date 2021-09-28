@@ -21,7 +21,7 @@ Given('a related tags API with a selected one', () => {
   cy.intercept('https://api.empathy.co/getRelatedTags', req => {
     req.reply({
       relatedTags: [
-        createRelatedTagStub('lego', 'bombero', true),
+        createRelatedTagStub('lego', 'bombero'),
         createRelatedTagStub('lego', 'policia'),
         createRelatedTagStub('lego', 'barbie')
       ]

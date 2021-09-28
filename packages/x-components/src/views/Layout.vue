@@ -274,7 +274,7 @@
               <span data-test="partial-query">{{ partialResult.query }}</span>
               <BaseGrid :animation="resultsAnimation" :columns="4" :items="partialResult.results">
                 <template #Result="{ item }">
-                  <Result :result="item" data-test="partial-result-item"/>
+                  <Result :result="item" data-test="partial-result-item" />
                 </template>
               </BaseGrid>
               <PartialQueryButton :query="partialResult.query">
@@ -296,10 +296,9 @@
 
 <script lang="ts">
   import { deepMerge } from '@empathyco/x-deep-merge';
-  import { Facet, Result, SimpleFilter as SimpleFilterModel } from '@empathyco/x-types';
+  import { Facet, SimpleFilter as SimpleFilterModel } from '@empathyco/x-types';
   import Vue from 'vue';
   import { Component } from 'vue-property-decorator';
-  import { State } from '../components/decorators/store.decorators';
   // eslint-disable-next-line max-len
   import ClearHistoryQueries from '../x-modules/history-queries/components/clear-history-queries.vue';
   import CollapseFromTop from '../components/animations/collapse-from-top.vue';

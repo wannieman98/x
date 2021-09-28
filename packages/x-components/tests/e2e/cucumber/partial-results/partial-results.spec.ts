@@ -1,11 +1,11 @@
 import { And, Given, Then, When } from 'cypress-cucumber-preprocessor/steps';
-import { createResultStub } from '../../../../src/__stubs__/results-stubs.factory';
+import { createResultStub, getResultsStub } from '../../../../src/__stubs__/results-stubs.factory';
 
 // Background
-Given('a results API with partial results', () => {
+Given('a partial results API with partials', () => {
   cy.intercept('https://api.empathy.co/search', req => {
     req.reply({
-      results: [],
+      results: [...getResultsStub()],
       partialResults: [
         {
           query: 'verde azul',
@@ -77,11 +77,7 @@ And('{string} contains the partial query', function (this: { searchedQuery: stri
 });
 
 When('first partial query button is clicked', function (this: { partialQueryButtonText: string }) {
-  cy.getByDataTest('partial-query-button')
-    .first()
-    .click()
-    .invoke('text')
-    .as('partialQueryButtonText');
+  cy.getByDataTest('partial-query').first().click().invoke('text').as('partialQueryButtonText');
 });
 
 Then(
