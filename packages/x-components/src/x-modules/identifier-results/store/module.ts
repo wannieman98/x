@@ -23,7 +23,7 @@ export const identifierResultsXStoreModule: IdentifierResultsXStoreModule = {
     config: {
       debounceInMs: 600,
       maxItemsToRequest: 10,
-      identifierDetectionRegexp: '^[0-9]{2,}$',
+      identifierDetectionRegexp: '^[a-zA-Z][0-9]+',
       separatorChars: '-/ '
     }
   }),

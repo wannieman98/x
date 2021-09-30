@@ -1,11 +1,15 @@
 import { And, Given, Then, When } from 'cypress-cucumber-preprocessor/steps';
-import { createResultStub, getResultsStub } from '../../../../src/__stubs__/results-stubs.factory';
+import { createResultStub } from '../../../../src/__stubs__/results-stubs.factory';
 
 // Background
-Given('a partial results API with partials', () => {
+Given('a results API with partial results', () => {
   cy.intercept('https://api.empathy.co/search', req => {
     req.reply({
-      results: [...getResultsStub()],
+      results: [
+        createResultStub('LEGO Super Mario Pack Inicial: Aventuras con Mario - 71360', {
+          images: ['https://picsum.photos/seed/1/100/100']
+        })
+      ],
       partialResults: [
         {
           query: 'verde azul',
@@ -48,7 +52,9 @@ Given('no special config for partial-results view', () => {
 });
 
 Then('at least {int} related results are displayed', (minResultsWithoutPartials: number) => {
-  cy.getByDataTest('result-text').should('have.length.at.least', minResultsWithoutPartials);
+  cy.getByDataTest('result-text')
+    .should('be.visible')
+    .should('have.length.at.least', minResultsWithoutPartials);
 });
 
 And('no partial results are displayed', () => {
@@ -57,11 +63,13 @@ And('no partial results are displayed', () => {
 
 // Scenario 2
 Then('less than {int} related results are displayed', (minResultsWithoutPartials: number) => {
-  cy.getByDataTest('regular-result').should('have.length.at.most', minResultsWithoutPartials - 1);
+  cy.getByDataTest('result-text')
+    .should('be.visible')
+    .should('have.length.at.most', minResultsWithoutPartials - 1);
 });
 
 And('partial results are displayed', () => {
-  cy.getByDataTest('partial-result-item').should('exist');
+  cy.getByDataTest('partial-result-item').should('be.visible');
 });
 
 // Scenario 3
@@ -77,7 +85,8 @@ And('{string} contains the partial query', function (this: { searchedQuery: stri
 });
 
 When('first partial query button is clicked', function (this: { partialQueryButtonText: string }) {
-  cy.getByDataTest('partial-query').first().click().invoke('text').as('partialQueryButtonText');
+  cy.getByDataTest('partial-query').first().invoke('text').as('partialQueryButtonText');
+  cy.getByDataTest('partial-query-button').first().click();
 });
 
 Then(
