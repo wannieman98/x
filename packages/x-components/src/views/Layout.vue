@@ -231,14 +231,20 @@
         <template #main-body>
           <!-- IdentifierResults -->
           <div v-if="$x.identifierResults.length">
-            <h1>Identifer Suggestions</h1>
-            <IdentifierResults>
+            <h1 class="x-title1">Identifier Results</h1>
+            <IdentifierResults class="x-list x-list--horizontal">
               <template #default="{ identifierResult }">
-                <BaseResultLink :result="identifierResult">
-                  <template #default="{ result }">
-                    <IdentifierResult :result="result" />
-                  </template>
-                </BaseResultLink>
+                <article class="result" style="max-width: 300px">
+                  <BaseResultImage :result="identifierResult" class="x-picture--colored">
+                    <template #placeholder>
+                      <div style="padding-top: 100%; background-color: lightgray"></div>
+                    </template>
+                    <template #fallback>
+                      <div style="padding-top: 100%; background-color: lightsalmon"></div>
+                    </template>
+                  </BaseResultImage>
+                  <h1 class="x-title3" data-test="result-text">{{ identifierResult.name }}</h1>
+                </article>
               </template>
             </IdentifierResults>
           </div>
