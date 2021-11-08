@@ -355,22 +355,26 @@
                     <NextQueriesList>
                       <BaseVariableColumnGrid :animation="resultsAnimation">
                         <template #result="{ item: result }">
-                          <article class="result" style="max-width: 300px">
-                            <BaseResultLink :result="result">
-                              <BaseResultImage :result="result" class="x-picture--colored">
-                                <template #placeholder>
-                                  <div style="padding-top: 100%; background-color: lightgray"></div>
-                                </template>
-                                <template #fallback>
-                                  <div
-                                    data-test="result-picture-fallback"
-                                    style="padding-top: 100%; background-color: lightsalmon"
-                                  ></div>
-                                </template>
-                              </BaseResultImage>
-                              <h1 class="x-title3" data-test="result-text">{{ result.name }}</h1>
-                            </BaseResultLink>
-                          </article>
+                          <ScrollItem :item="result">
+                            <article class="result" style="max-width: 300px">
+                              <BaseResultLink :result="result">
+                                <BaseResultImage :result="result" class="x-picture--colored">
+                                  <template #placeholder>
+                                    <div
+                                      style="padding-top: 100%; background-color: lightgray"
+                                    ></div>
+                                  </template>
+                                  <template #fallback>
+                                    <div
+                                      data-test="result-picture-fallback"
+                                      style="padding-top: 100%; background-color: lightsalmon"
+                                    ></div>
+                                  </template>
+                                </BaseResultImage>
+                                <h1 class="x-title3" data-test="result-text">{{ result.name }}</h1>
+                              </BaseResultLink>
+                            </article>
+                          </ScrollItem>
                         </template>
 
                         <template #banner="{ item: banner }">
@@ -518,6 +522,7 @@
   import BaseResultImage from '../components/result/base-result-image.vue';
   import BaseResultLink from '../components/result/base-result-link.vue';
   import BaseScrollToTop from '../components/scroll/base-scroll-to-top.vue';
+  import ScrollItem from '../components/scroll/scroll-item.vue';
   import SlidingPanel from '../components/sliding-panel.vue';
   import BaseSuggestions from '../components/suggestions/base-suggestions.vue';
   import { infiniteScroll } from '../directives/infinite-scroll/infinite-scroll';
@@ -590,6 +595,7 @@
       infiniteScroll
     },
     components: {
+      ScrollItem,
       BasePriceFilterLabel,
       AutoProgressBar,
       Banner,

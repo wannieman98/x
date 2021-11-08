@@ -10,9 +10,7 @@
     <li
       v-for="{ slotName, item, cssClass } in gridItems"
       :key="item.id"
-      ref="gridItemElements"
       :class="cssClass"
-      :data-scroll="item.id"
       class="x-grid__item x-base-grid__item"
     >
       <!--
@@ -159,57 +157,6 @@
           cssClass: `x-base-grid__${slotName}`
         };
       });
-    }
-
-    @XInject('scrollTo')
-    public scrollTo!: string | null;
-
-    @XInject('firstVisibleItemObserver')
-    public firstVisibleItemObserver!: IntersectionObserver | null;
-
-    public $refs!: {
-      gridItemElements: HTMLElement[];
-    };
-
-    beforeUpdate(): void {
-      this.unobserveItems();
-    }
-
-    beforeDestroy(): void {
-      this.unobserveItems();
-    }
-
-    mounted(): void {
-      this.$watch(
-        'computedItems',
-        () => {
-          this.$nextTick().then(() => {
-            this.tryRestoringScroll();
-            this.observeItems();
-          });
-        },
-        { immediate: true }
-      );
-    }
-
-    protected unobserveItems(): void {
-      this.$refs.gridItemElements?.forEach(element => {
-        this.firstVisibleItemObserver?.unobserve(element);
-      });
-    }
-
-    protected observeItems(): void {
-      this.$refs.gridItemElements?.forEach(element => {
-        this.firstVisibleItemObserver?.observe(element);
-      });
-    }
-
-    protected tryRestoringScroll(): void {
-      if (this.scrollTo) {
-        this.$refs.gridItemElements
-          ?.find(element => element.dataset.scroll === this.scrollTo)
-          ?.scrollIntoView();
-      }
     }
   }
 </script>
