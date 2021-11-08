@@ -1,11 +1,18 @@
 import Vue from 'vue';
-import { Component, Prop, Watch } from 'vue-property-decorator';
+import { Component, Prop } from 'vue-property-decorator';
 import { UrlParams } from '../../types/url-params';
 import { XOn } from '../decorators/bus.decorators';
+import { XProvide } from '../decorators/injection.decorators';
 
 @Component
 /* eslint-disable @typescript-eslint/unbound-method */
 export default class MainScrollMixin extends Vue {
+  /**
+   * The reference to the HTML node that has the scroll.
+   *
+   * @public
+   */
+  public $el!: HTMLElement;
   /**
    * If `true`, sets this scroll instance to the main of the application. Being the main
    * scroll implies that features like restoring the scroll when the query changes, or storing
@@ -15,21 +22,19 @@ export default class MainScrollMixin extends Vue {
    */
   @Prop({ default: false })
   public main!: boolean;
-
   /**
    * Timeout in milliseconds to abort trying to restore the scroll position to the target
    * element.
    */
   @Prop({ default: 5000 })
   public restoreScrollTimeoutMs!: number;
-
+  @XProvide('scrollTo')
   /**
-   * The reference to the HTML node that has the scroll.
+   * The `[data-scroll]` value of the element that the component will try to scroll into view.
    *
-   * @public
+   * @internal
    */
-  public $el!: HTMLElement;
-
+  public scrollTo: string | null = null;
   /**
    * If true (default), sets the scroll position to top when an
    * {@link XEventsTypes.UserAcceptedAQuery} event is emitted.
@@ -44,40 +49,25 @@ export default class MainScrollMixin extends Vue {
   })
   protected resetOnQueryChange!: boolean;
 
-  /**
-   * The id of the timeout which cancels restoring the scroll. In case the target element is found
-   * we have to abort the timeout.
-   *
-   * @internal
-   */
-  protected restoreScrollTimeoutId?: number;
-
-  /**
-   * The `[data-scroll]` value of the element that the component will try to scroll into view.
-   *
-   * @internal
-   */
-  protected scrollTo: string | null = null;
-
-  /**
-   * If this is the main scroll, the mutation observer that will try to restore the scroll when
-   * the children of this component are added to the DOM.
-   *
-   * @returns A `MutationObserver` if the scroll should be restored, or `null` if it shouldn't.
-   * @internal
-   */
-  protected get observer(): MutationObserver | null {
+  @XProvide('scrollObserver')
+  public get observer(): IntersectionObserver | null {
     return this.main
-      ? new MutationObserver((_entries, observer) => {
-          const scrollTarget = this.$el.querySelector<HTMLElement>(
-            `[data-scroll="${this.scrollTo!}"]`
-          );
-          if (scrollTarget) {
-            scrollTarget.scrollIntoView();
-            clearTimeout(this.restoreScrollTimeoutId);
-            observer.disconnect();
+      ? new IntersectionObserver(
+          entries => {
+            const firstIntersection = entries.find(entry => entry.isIntersecting);
+            if (firstIntersection) {
+              this.$emit(
+                'scroll:at-element',
+                (firstIntersection.target as HTMLElement).dataset.scroll
+              );
+            }
+          },
+          {
+            root: this.$el,
+            rootMargin: '0px 0px -100% 0px',
+            threshold: 0.99
           }
-        })
+        )
       : null;
   }
 
@@ -90,20 +80,6 @@ export default class MainScrollMixin extends Vue {
         'Components using this mixin must set `this.$el` to the HTML node that is scrolling.'
       );
     }
-  }
-
-  /**
-   * Disconnects the previous mutation observer to avoid leaking it.
-   *
-   * @param _newObserver - The new mutation observer that will try to restore the scroll.
-   * @param oldObserver - The old mutation observer that will try to restore the scroll.
-   */
-  @Watch('observer')
-  protected cleanupObserver(
-    _newObserver: MutationObserver | null,
-    oldObserver: MutationObserver | null
-  ): void {
-    oldObserver?.disconnect();
   }
 
   /**
@@ -135,27 +111,6 @@ export default class MainScrollMixin extends Vue {
      trying to scroll */
     if (this.main && scroll) {
       this.scrollTo = scroll;
-    }
-  }
-
-  /**
-   * If possible, connects the mutation observer to try to restore the scroll. If it doesn't
-   * succeed after {@link MainScrollMixin.restoreScrollTimeoutMs | restoreScrollTimeoutMs}, it will
-   * abort the attempt.
-   *
-   * @internal
-   */
-  @Watch('scrollTo')
-  protected tryRestoringScroll(): void {
-    if (this.$el && this.scrollTo && this.observer) {
-      this.observer.observe(this.$el, {
-        childList: true,
-        subtree: true
-      });
-      this.restoreScrollTimeoutId = setTimeout(
-        this.observer.disconnect,
-        this.restoreScrollTimeoutMs
-      );
     }
   }
 }

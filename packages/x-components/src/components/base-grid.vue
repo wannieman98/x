@@ -10,6 +10,7 @@
     <li
       v-for="{ slotName, item, cssClass } in gridItems"
       :key="item.id"
+      ref="gridItemElements"
       :class="cssClass"
       :data-scroll="item.id"
       class="x-grid__item x-base-grid__item"
@@ -32,11 +33,11 @@
 
 <script lang="ts">
   import Vue from 'vue';
-  import { Component, Prop } from 'vue-property-decorator';
+  import { Component, Prop, Watch } from 'vue-property-decorator';
   import { toKebabCase } from '../utils/string';
   import { ListItem, VueCSSClasses } from '../utils/types';
-  import { XInject } from './decorators/injection.decorators';
   import { LIST_ITEMS_KEY } from './decorators/injection.consts';
+  import { XInject } from './decorators/injection.decorators';
 
   /**
    * The type returned by the gridItems function. Basically it's a list of items with its CSS
@@ -158,6 +159,52 @@
           cssClass: `x-base-grid__${slotName}`
         };
       });
+    }
+
+    @XInject('scrollTo')
+    public scrollTo!: string | null;
+
+    @XInject('scrollObserver')
+    public scrollObserver!: IntersectionObserver | null;
+
+    public $refs!: {
+      gridItemElements: HTMLElement[];
+    };
+
+    beforeUpdate(): void {
+      this.unobserveItems();
+    }
+
+    beforeDestroy(): void {
+      this.unobserveItems();
+    }
+
+    @Watch('computedItems', { immediate: true })
+    updateScrollState(): void {
+      this.$nextTick().then(() => {
+        this.tryRestoringScroll();
+        this.observeItems();
+      });
+    }
+
+    protected unobserveItems(): void {
+      this.$refs.gridItemElements?.forEach(element => {
+        this.scrollObserver?.unobserve(element);
+      });
+    }
+
+    protected observeItems(): void {
+      this.$refs.gridItemElements?.forEach(element => {
+        this.scrollObserver!.observe(element);
+      });
+    }
+
+    protected tryRestoringScroll(): void {
+      if (this.scrollTo) {
+        this.$refs.gridItemElements
+          ?.find(element => element.dataset.scroll === this.scrollTo)
+          ?.scrollIntoView();
+      }
     }
   }
 </script>
