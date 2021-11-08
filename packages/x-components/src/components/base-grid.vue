@@ -33,7 +33,7 @@
 
 <script lang="ts">
   import Vue from 'vue';
-  import { Component, Prop, Watch } from 'vue-property-decorator';
+  import { Component, Prop } from 'vue-property-decorator';
   import { toKebabCase } from '../utils/string';
   import { ListItem, VueCSSClasses } from '../utils/types';
   import { LIST_ITEMS_KEY } from './decorators/injection.consts';
@@ -164,8 +164,8 @@
     @XInject('scrollTo')
     public scrollTo!: string | null;
 
-    @XInject('scrollObserver')
-    public scrollObserver!: IntersectionObserver | null;
+    @XInject('firstVisibleItemObserver')
+    public firstVisibleItemObserver!: IntersectionObserver | null;
 
     public $refs!: {
       gridItemElements: HTMLElement[];
@@ -179,23 +179,28 @@
       this.unobserveItems();
     }
 
-    @Watch('computedItems', { immediate: true })
-    updateScrollState(): void {
-      this.$nextTick().then(() => {
-        this.tryRestoringScroll();
-        this.observeItems();
-      });
+    mounted(): void {
+      this.$watch(
+        'computedItems',
+        () => {
+          this.$nextTick().then(() => {
+            this.tryRestoringScroll();
+            this.observeItems();
+          });
+        },
+        { immediate: true }
+      );
     }
 
     protected unobserveItems(): void {
       this.$refs.gridItemElements?.forEach(element => {
-        this.scrollObserver?.unobserve(element);
+        this.firstVisibleItemObserver?.unobserve(element);
       });
     }
 
     protected observeItems(): void {
       this.$refs.gridItemElements?.forEach(element => {
-        this.scrollObserver!.observe(element);
+        this.firstVisibleItemObserver?.observe(element);
       });
     }
 

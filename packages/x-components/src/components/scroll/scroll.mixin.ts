@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import { debounce } from '../../utils/debounce';
 import { throttle } from '../../utils/throttle';
+import { XProvide } from '../decorators/injection.decorators';
 import { ScrollDirection } from './scroll.types';
 
 /**
@@ -12,6 +12,12 @@ import { ScrollDirection } from './scroll.types';
 @Component
 /* eslint-disable @typescript-eslint/unbound-method */
 export default class ScrollMixin extends Vue {
+  /**
+   * The scrolling container reference.
+   *
+   * @public
+   */
+  public $el!: HTMLElement;
   /**
    * Distance to the end of the scroll that when reached will emit the
    * `scroll:about-to-end` event.
@@ -27,6 +33,9 @@ export default class ScrollMixin extends Vue {
    */
   @Prop({ default: 100 })
   public firstElementThresholdPx!: number;
+
+  @XProvide('firstVisibleItemObserver')
+  public firstVisibleItemObserver: IntersectionObserver | null = null;
   /**
    * Time duration to ignore the subsequent scroll events after an emission.
    * Higher values will decrease events precision but can prevent performance issues.
@@ -35,12 +44,6 @@ export default class ScrollMixin extends Vue {
    */
   @Prop({ default: 100 })
   public throttleMs!: number;
-  /**
-   * The scrolling container reference.
-   *
-   * @public
-   */
-  public $el!: HTMLElement;
   /**
    * Property for getting the client height of scroll.
    *
@@ -59,6 +62,7 @@ export default class ScrollMixin extends Vue {
    * @internal
    */
   protected direction!: ScrollDirection;
+  protected firstVisibleElement: string | null = null;
   /**
    * Property for getting the previous position of scroll.
    *
@@ -71,9 +75,6 @@ export default class ScrollMixin extends Vue {
    * @internal
    */
   protected scrollHeight = 0;
-
-  protected firstVisibleElement: string | null = null;
-
   /**
    * Throttled version of the function that stores the DOM scroll related properties.
    * The duration of the throttle is configured through the
@@ -155,28 +156,28 @@ export default class ScrollMixin extends Vue {
         );
       } else {
         this.storeScrollData();
-        this.observeFirstVisibleElement();
+        this.firstVisibleItemObserver = new IntersectionObserver(
+          entries => {
+            const firstIntersectingScrollItem = entries.find(
+              entry => entry.isIntersecting && (entry.target as HTMLElement).dataset.scroll
+            );
+            if (firstIntersectingScrollItem) {
+              this.firstVisibleElement = (
+                firstIntersectingScrollItem.target as HTMLElement
+              ).dataset.scroll!;
+            }
+          },
+          {
+            root: this.$el,
+            rootMargin: '0px 0px -100% 0px'
+          }
+        );
       }
     });
   }
 
-  /**
-   * Saves the `[data-scroll]` value of the first visible HTML element.
-   *
-   * @internal
-   */
-  @Watch('currentPosition')
-  protected updateFirstVisibleElement(): void {
-    if (this.$el) {
-      const containerTop = this.$el.getBoundingClientRect().top - this.firstElementThresholdPx;
-      // FIXME: If the scroll items are moved using CSS this `.find` will return a wrong element.
-      const firstVisibleElement = Array.from(
-        this.$el.querySelectorAll<HTMLElement>('[data-scroll]')
-      ).find(childElement => childElement.getBoundingClientRect().top > containerTop);
-      this.firstVisibleElement = firstVisibleElement?.dataset.scroll ?? null;
-    } else {
-      this.firstVisibleElement = null;
-    }
+  beforeDestroy(): void {
+    this.firstVisibleItemObserver?.disconnect();
   }
 
   /**
@@ -250,22 +251,6 @@ export default class ScrollMixin extends Vue {
     if (isScrollAtStart) {
       this.$emit('scroll:at-start');
     }
-  }
-
-  /**
-   * Creates a mutation observer to set the first visible element.
-   *
-   * @internal
-   */
-  protected observeFirstVisibleElement(): void {
-    const observer = new MutationObserver(debounce(this.updateFirstVisibleElement, 0));
-    observer.observe(this.$el, {
-      childList: true,
-      subtree: true
-    });
-    this.$on('hook:beforeDestroy', () => {
-      observer.disconnect();
-    });
   }
 
   /**

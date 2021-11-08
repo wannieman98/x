@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { Component, Prop } from 'vue-property-decorator';
+import { Component, Prop, Watch } from 'vue-property-decorator';
 import { UrlParams } from '../../types/url-params';
 import { XOn } from '../decorators/bus.decorators';
 import { XProvide } from '../decorators/injection.decorators';
@@ -28,12 +28,12 @@ export default class MainScrollMixin extends Vue {
    */
   @Prop({ default: 5000 })
   public restoreScrollTimeoutMs!: number;
-  @XProvide('scrollTo')
   /**
    * The `[data-scroll]` value of the element that the component will try to scroll into view.
    *
    * @internal
    */
+  @XProvide('scrollTo')
   public scrollTo: string | null = null;
   /**
    * If true (default), sets the scroll position to top when an
@@ -49,27 +49,7 @@ export default class MainScrollMixin extends Vue {
   })
   protected resetOnQueryChange!: boolean;
 
-  @XProvide('scrollObserver')
-  public get observer(): IntersectionObserver | null {
-    return this.main
-      ? new IntersectionObserver(
-          entries => {
-            const firstIntersection = entries.find(entry => entry.isIntersecting);
-            if (firstIntersection) {
-              this.$emit(
-                'scroll:at-element',
-                (firstIntersection.target as HTMLElement).dataset.scroll
-              );
-            }
-          },
-          {
-            root: this.$el,
-            rootMargin: '0px 0px -100% 0px',
-            threshold: 0.99
-          }
-        )
-      : null;
-  }
+  public restoreScrollFailTimeoutId?: number;
 
   mounted(): void {
     if (!this.$el) {
@@ -111,6 +91,16 @@ export default class MainScrollMixin extends Vue {
      trying to scroll */
     if (this.main && scroll) {
       this.scrollTo = scroll;
+    }
+  }
+
+  @Watch('scrollTo')
+  failRestoringScroll(scrollTo: string | null): void {
+    clearTimeout(this.restoreScrollFailTimeoutId);
+    if (scrollTo) {
+      this.restoreScrollFailTimeoutId = setTimeout(() => {
+        scrollTo = null;
+      });
     }
   }
 }
