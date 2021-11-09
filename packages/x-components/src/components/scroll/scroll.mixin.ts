@@ -2,6 +2,7 @@ import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import { throttle } from '../../utils/throttle';
 import { XProvide } from '../decorators/injection.decorators';
+import { FirstVisibleItemObserverKey } from './scroll.const';
 import { ScrollDirection } from './scroll.types';
 
 /**
@@ -34,7 +35,10 @@ export default class ScrollMixin extends Vue {
   @Prop({ default: 100 })
   public firstElementThresholdPx!: number;
 
-  @XProvide('firstVisibleItemObserver')
+  /**
+   * First item observer. Initialised after the component has been mounted.
+   */
+  @XProvide(FirstVisibleItemObserverKey)
   public firstVisibleItemObserver: IntersectionObserver | null = null;
   /**
    * Time duration to ignore the subsequent scroll events after an emission.
@@ -145,6 +149,11 @@ export default class ScrollMixin extends Vue {
     return this.scrollHeight - this.clientHeight;
   }
 
+  /**
+   * Initialises DOM dependant scroll properties.
+   *
+   * @internal
+   */
   mounted(): void {
     this.$nextTick().then(() => {
       if (!this.$el) {
@@ -156,26 +165,16 @@ export default class ScrollMixin extends Vue {
         );
       } else {
         this.storeScrollData();
-        this.firstVisibleItemObserver = new IntersectionObserver(
-          entries => {
-            const firstIntersectingScrollItem = entries.find(
-              entry => entry.isIntersecting && (entry.target as HTMLElement).dataset.scroll
-            );
-            if (firstIntersectingScrollItem) {
-              this.firstVisibleElement = (
-                firstIntersectingScrollItem.target as HTMLElement
-              ).dataset.scroll!;
-            }
-          },
-          {
-            root: this.$el,
-            rootMargin: '0px 0px -100% 0px'
-          }
-        );
+        this.initialiseFirstElementObserver();
       }
     });
   }
 
+  /**
+   * Disconnects the {@link ScrollMixin.firstVisibleItemObserver}.
+   *
+   * @internal
+   */
   beforeDestroy(): void {
     this.firstVisibleItemObserver?.disconnect();
   }
@@ -264,6 +263,31 @@ export default class ScrollMixin extends Vue {
       this.scrollHeight = this.$el.scrollHeight;
       this.clientHeight = this.$el.clientHeight;
     }
+  }
+
+  /**
+   * Creates an `IntersectionObserver` to detect the first visible elements. Children of this
+   * component should register themselves if they want to be observed.
+   *
+   * @internal
+   */
+  protected initialiseFirstElementObserver(): void {
+    this.firstVisibleItemObserver = new IntersectionObserver(
+      entries => {
+        entries.reverse().forEach(entry => {
+          const dataScroll = (entry.target as HTMLElement).dataset.scroll!;
+          if (entry.isIntersecting) {
+            this.firstVisibleElement = dataScroll;
+          } else if (!entry.isIntersecting && this.firstVisibleElement === dataScroll) {
+            this.firstVisibleElement = null;
+          }
+        });
+      },
+      {
+        root: this.$el,
+        rootMargin: '0px 0px -100% 0px'
+      }
+    );
   }
 }
 /*  eslint-enable @typescript-eslint/unbound-method */

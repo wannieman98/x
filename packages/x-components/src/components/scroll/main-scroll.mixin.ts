@@ -3,6 +3,7 @@ import { Component, Prop, Watch } from 'vue-property-decorator';
 import { UrlParams } from '../../types/url-params';
 import { XOn } from '../decorators/bus.decorators';
 import { XProvide } from '../decorators/injection.decorators';
+import { PendingScrollTo } from './scroll.const';
 
 @Component
 /* eslint-disable @typescript-eslint/unbound-method */
@@ -13,6 +14,12 @@ export default class MainScrollMixin extends Vue {
    * @public
    */
   public $el!: HTMLElement;
+  /**
+   * The last `[data-scroll]` element that has been restored.
+   *
+   * @internal
+   */
+  public lastRestoredScrollTo: string | null = null;
   /**
    * If `true`, sets this scroll instance to the main of the application. Being the main
    * scroll implies that features like restoring the scroll when the query changes, or storing
@@ -33,7 +40,6 @@ export default class MainScrollMixin extends Vue {
    *
    * @internal
    */
-  @XProvide('scrollTo')
   public scrollTo: string | null = null;
   /**
    * If true (default), sets the scroll position to top when an
@@ -48,9 +54,28 @@ export default class MainScrollMixin extends Vue {
     }
   })
   protected resetOnQueryChange!: boolean;
+  /**
+   * Stores the identifier of the timeout that will consider the scroll failed to restore.
+   *
+   * @internal
+   */
+  protected restoreScrollFailTimeoutId?: number;
 
-  public restoreScrollFailTimeoutId?: number;
+  /**
+   * Returns a `[data-scroll]` value if there is any pending scroll to restore.
+   *
+   * @returns A `[data-scroll]` value if the scroll is pending to restore, or `null` if it isn't.
+   */
+  @XProvide(PendingScrollTo)
+  public get pendingScrollTo(): string | null {
+    return this.scrollTo && this.scrollTo !== this.lastRestoredScrollTo ? this.scrollTo : null;
+  }
 
+  /**
+   * Ensures that this mixin is applied on a valid component.
+   *
+   * @internal
+   */
   mounted(): void {
     if (!this.$el) {
       // TODO Replace with Empathy's logger
@@ -80,6 +105,17 @@ export default class MainScrollMixin extends Vue {
   }
 
   /**
+   * Sets the `[data-scroll]` that the scroll has been last restored to.
+   *
+   * @param lastRestoredScrollTo - The last position the scroll has been restored to.
+   * @internal
+   */
+  @XOn('ScrollRestored')
+  setLastRestoredScroll(lastRestoredScrollTo: string | null): void {
+    this.lastRestoredScrollTo = lastRestoredScrollTo;
+  }
+
+  /**
    * Saves the `[data-scroll]` value that should try to be restored.
    *
    * @param urlParams - The URL parameters, where the `scroll` information is stored.
@@ -87,20 +123,24 @@ export default class MainScrollMixin extends Vue {
    */
   @XOn('ParamsLoadedFromUrl')
   setScrollTo({ scroll }: UrlParams): void {
-    /* FIXME: If the scroll component is destroyed and remounted this logic will be executed again,
-     trying to scroll */
     if (this.main && scroll) {
       this.scrollTo = scroll;
     }
   }
 
-  @Watch('scrollTo')
-  failRestoringScroll(scrollTo: string | null): void {
+  /**
+   * If there is a pending scroll, starts a countdown to stop trying to restore the scroll.
+   *
+   * @param pendingScrollTo - The position the scroll should be restored to.
+   * @internal
+   */
+  @Watch('pendingScrollTo')
+  protected failRestoringScroll(pendingScrollTo: string | null): void {
     clearTimeout(this.restoreScrollFailTimeoutId);
-    if (scrollTo) {
+    if (pendingScrollTo) {
       this.restoreScrollFailTimeoutId = setTimeout(() => {
-        scrollTo = null;
-      });
+        pendingScrollTo = null;
+      }, this.restoreScrollTimeoutMs);
     }
   }
 }

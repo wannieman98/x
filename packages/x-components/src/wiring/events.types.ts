@@ -66,6 +66,11 @@ export interface XEventsTypes
    */
   ColumnsNumberProvided: number;
   /**
+   * The scroll position has been restored successfully.
+   * * Payload: the identifier of the restored scroll position.
+   */
+  ScrollRestored: string;
+  /**
    * Any kind of suggestions have been displayed (query-suggestions, popular searches...)
    * * Payload: The displayed {@link @empathyco/x-types#Suggestion | suggestions}.
    */
@@ -185,7 +190,6 @@ export interface XEventsTypes
    * * Payload: The new position of scroll.
    */
   UserScrolled: number;
-
   /**
    * The user has scrolled to an element. This element is the first HTML element visible.
    * * Payload: The `data-scroll` value of the first visible element.

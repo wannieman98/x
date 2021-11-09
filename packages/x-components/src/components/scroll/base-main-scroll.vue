@@ -1,12 +1,16 @@
+<template>
+  <GlobalEvents @scroll="throttledStoreScrollData" />
+</template>
 <script lang="ts">
-  import { Component, Prop } from 'vue-property-decorator';
   import { mixins } from 'vue-class-component';
-  import { throttle } from '../../utils/throttle';
-  import { XEvent, XEventPayload } from '../../wiring';
+  import GlobalEvents from 'vue-global-events';
+  import { Component, Prop } from 'vue-property-decorator';
+  import { WireMetadata } from '../../wiring';
+  import MainScrollMixin from './main-scroll.mixin';
   import ScrollMixin from './scroll.mixin';
   import { ScrollDirection } from './scroll.types';
 
-  type ScrollableTag = 'html' | 'body';
+  type ScrollableTag = 'document' | 'window';
 
   /**
    * Main scroll component that depending on the user interactivity emits different events for
@@ -15,14 +19,18 @@
    *
    * @public
    */
-  @Component
-  export default class BaseMainScroll extends mixins(ScrollMixin) {
+  @Component({
+    components: {
+      GlobalEvents
+    }
+  })
+  export default class WindowScroll extends mixins(ScrollMixin, MainScrollMixin) {
     /**
      * Tag to identify the main scrollable element.
      *
      * @public
      */
-    @Prop({ default: 'html' })
+    @Prop({ default: 'document' })
     protected tag!: ScrollableTag;
 
     /**
@@ -33,116 +41,33 @@
     @Prop({ default: 'main-scroll' })
     protected id!: string;
 
-    /**
-     * The HTMLElement to use as the scrollable element based on {@link BaseMainScroll.tag}.
-     *
-     * @public
-     */
-    protected element!: HTMLElement;
-
-    /**
-     * Main element of page for listening the event scroll.
-     *
-     * @internal
-     */
-    protected elementListener!: Document | HTMLElement;
-
-    /**
-     * Throttled version of the function that stores the DOM scroll related properties.
-     * The duration of the throttle is configured through the
-     * {@link ScrollMixin.throttleMs }.
-     *
-     * @internal
-     */
-    // eslint-disable-next-line @typescript-eslint/unbound-method
-    protected throttledStoreScrollData = throttle(this.storeScrollData, this.throttleMs);
-
     mounted(): void {
-      this.initAndListenElement();
-
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      this.$el = document.body;
       this.$on('scroll', (position: number) => {
-        this.emitEvent('UserScrolled', position);
+        this.$x.emit('UserScrolled', position, this.createXEventMetadata());
       });
 
       this.$on('scroll:direction-change', (direction: ScrollDirection) => {
-        this.emitEvent('UserChangedScrollDirection', direction);
+        this.$x.emit('UserChangedScrollDirection', direction, this.createXEventMetadata());
       });
 
       this.$on('scroll:at-start', () => {
-        this.emitEvent('UserReachedScrollStart');
+        this.$x.emit('UserReachedScrollStart', undefined, this.createXEventMetadata());
       });
 
       this.$on('scroll:almost-at-end', (distance: number) => {
-        this.emitEvent('UserAlmostReachedScrollEnd', distance);
+        this.$x.emit('UserAlmostReachedScrollEnd', distance, this.createXEventMetadata());
       });
 
       this.$on('scroll:at-end', () => {
-        this.emitEvent('UserReachedScrollEnd');
+        this.$x.emit('UserReachedScrollEnd', undefined, this.createXEventMetadata());
       });
     }
 
-    /**
-     * Get the element depends on {@link BaseMainScroll.tag} if is html or body
-     * and listen the event scroll.
-     *
-     * @internal
-     */
-    protected initAndListenElement(): void {
-      if (this.tag === 'html') {
-        this.element = document.documentElement;
-        this.elementListener = document;
-      } else {
-        this.element = document.body;
-        this.elementListener = document.body;
-      }
-
-      this.elementListener.addEventListener('scroll', this.throttledStoreScrollData);
-    }
-
-    /**
-     * Updates main scroll related properties.
-     *
-     * @internal
-     */
-    protected storeScrollData(): void {
-      this.currentPosition = this.element.scrollTop;
-      this.scrollHeight = this.element.scrollHeight;
-      this.clientHeight = this.element.clientHeight;
-    }
-
-    /**
-     * Emits the event corresponding passed as parameter when the user has scrolled.
-     *
-     * @param event - Name of event to emit.
-     * @internal
-     */
-    protected emitEvent<Event extends XEvent>(event: Event): void;
-    /**
-     * Emits the event corresponding passed as parameter when the user has scrolled.
-     *
-     * @param event - Name of event to emit.
-     * @param payload - Data to send in the event like payload. {@link ScrollDirection | number}.
-     * @internal
-     */
-    protected emitEvent<Event extends XEvent>(event: Event, payload: XEventPayload<Event>): void;
-    /**
-     * Emits the event corresponding passed as parameter when the user has scrolled.
-     *
-     * @param event - Name of event to emit.
-     * @param payload - Optional data to send in the event like payload.
-     * {@link ScrollDirection | number}.
-     *
-     * @internal
-     */
-    protected emitEvent<Event extends XEvent>(event: Event, payload?: XEventPayload<Event>): void {
-      this.$x.emit(event, payload as any, { target: this.element, id: this.id });
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    render(): void {}
-
-    beforeDestroy(): void {
-      this.elementListener.removeEventListener('scroll', this.throttledStoreScrollData);
+    protected createXEventMetadata(): Partial<WireMetadata> {
+      return { target: this.$el, id: this.id };
     }
   }
 </script>
