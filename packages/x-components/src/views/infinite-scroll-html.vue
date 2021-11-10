@@ -1,20 +1,29 @@
 <template>
-  <div>
-    <h1>Infinite Scroll</h1>
+  <BaseMainScroll>
+    <UrlHandler />
+    <h1>Infinite Scroll HTML</h1>
     <header class="header">
       <SearchInput />
     </header>
-    <ResultsList v-infinite-scroll:html />
-  </div>
+    <ResultsList #result="{ item }" v-infinite-scroll:html>
+      <ScrollItem :item="item">
+        <img :src="item.images[0]" />
+        <p>{{ item.title }}</p>
+      </ScrollItem>
+    </ResultsList>
+  </BaseMainScroll>
 </template>
 
 <script lang="ts">
   import Vue from 'vue';
   import { Component } from 'vue-property-decorator';
+  import BaseMainScroll from '../components/scroll/window-scroll.vue';
+  import MainScrollItem from '../components/scroll/main-scroll-item.vue';
   import { XInstaller } from '../x-installer/x-installer/x-installer';
   import SearchInput from '../x-modules/search-box/components/search-input.vue';
   import ResultsList from '../x-modules/search/components/results-list.vue';
   import { infiniteScroll } from '../directives/infinite-scroll/infinite-scroll';
+  import UrlHandler from '../x-modules/url/components/url-handler.vue';
   import { baseInstallXOptions, baseSnippetConfig } from './base-config';
 
   @Component({
@@ -23,6 +32,9 @@
       next();
     },
     components: {
+      BaseMainScroll,
+      UrlHandler,
+      ScrollItem: MainScrollItem,
       ResultsList,
       SearchInput
     },

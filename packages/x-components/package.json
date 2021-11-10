@@ -49,6 +49,7 @@
     "test:unit": "npm run test:unit-jest && npm run test:unit-cypress",
     "test:unit-jest": "vue-cli-service test:unit",
     "test:unit-cypress": "cypress run-ct",
+    "test:unit-cypress:open": "cypress open-ct",
     "test:unit-coverage": "vue-cli-service test:unit --coverage",
     "test:unit-watch": "vue-cli-service test:unit --watch",
     "test:e2e": "vue-cli-service test:e2e",

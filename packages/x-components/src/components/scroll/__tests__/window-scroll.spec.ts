@@ -1,6 +1,6 @@
 import { mount, Wrapper } from '@vue/test-utils';
 import { getDataTestSelector, installNewXPlugin } from '../../../__tests__/utils';
-import BaseMainScroll from '../base-main-scroll.vue';
+import BaseMainScroll from '../window-scroll.vue';
 
 function renderBaseMainScroll({
   template = `<BaseMainScroll :throttleMs="throttleMs" :tag="tag"/>`,

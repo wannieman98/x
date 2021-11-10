@@ -522,7 +522,7 @@
   import BaseResultImage from '../components/result/base-result-image.vue';
   import BaseResultLink from '../components/result/base-result-link.vue';
   import BaseScrollToTop from '../components/scroll/base-scroll-to-top.vue';
-  import ScrollItem from '../components/scroll/scroll-item.vue';
+  import MainScrollItem from '../components/scroll/main-scroll-item.vue';
   import SlidingPanel from '../components/sliding-panel.vue';
   import BaseSuggestions from '../components/suggestions/base-suggestions.vue';
   import { infiniteScroll } from '../directives/infinite-scroll/infinite-scroll';
@@ -595,7 +595,7 @@
       infiniteScroll
     },
     components: {
-      ScrollItem,
+      ScrollItem: MainScrollItem,
       BasePriceFilterLabel,
       AutoProgressBar,
       Banner,

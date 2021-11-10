@@ -1,65 +1,83 @@
 <template>
-  <NoElement :data-scroll="item.id">
+  <component :is="tag" :data-scroll="item.id">
     <slot />
-  </NoElement>
+  </component>
 </template>
 <script lang="ts">
   import { Identifiable } from '@empathyco/x-types';
   import Vue from 'vue';
   import { Component, Prop } from 'vue-property-decorator';
-  import SearchInput from '../../x-modules/search-box/components/search-input.vue';
-  import ResultsList from '../../x-modules/search/components/results-list.vue';
   import { XInject } from '../decorators/injection.decorators';
   import { NoElement } from '../no-element';
-  import BaseIdScroll from './base-id-scroll.vue';
   import { FirstVisibleItemObserverKey, PendingScrollTo } from './scroll.const';
+  import { ScrollVisibilityObserver } from './scroll.types';
 
   /**
-   * Wrapper for elements that can store/restore its position.
+   * Wrapper for elements contained in the {@link MainScroll} that should store/restore its
+   * position.
+   *
+   * @public
    */
   @Component({
-    components: { SearchInput, ResultsList, BaseIdScroll, NoElement }
+    components: { NoElement }
   })
-  export default class ScrollItem extends Vue {
+  export default class MainScrollItem extends Vue {
     /**
      * The item data. Used to set the scroll identifier.
+     *
+     * @public
      */
     @Prop({ required: true })
     public item!: Identifiable;
 
     /**
-     * Pending identifier scroll position to restore. If it matches the {@link ScrollItem.item} `id`
-     * property, this component should be scrolled into view.
+     * The tag to render.
+     *
+     * @public
+     */
+    @Prop({ default: 'NoElement' })
+    public tag!: string;
+
+    /**
+     * Pending identifier scroll position to restore. If it matches the {@link MainScrollItem.item}
+     * `id` property, this component should be scrolled into view.
+     *
+     * @internal
      */
     @XInject(PendingScrollTo)
     public scrollTo!: string | null;
 
     /**
      * Observer to detect the first visible element.
+     *
+     * @internal
      */
     @XInject(FirstVisibleItemObserverKey)
-    public firstVisibleItemObserver!: IntersectionObserver | null;
+    public firstVisibleItemObserver!: ScrollVisibilityObserver | null;
 
     /**
      * Initialise scroll behavior.
      * - Observes the rendered element to detect if it is the first visible item.
-     * - If the rendered element matches the {@link ScrollItem.scrollTo}, scrolls the element into
-     * the first position of the view.
+     * - If the rendered element matches the {@link MainScrollItem.scrollTo}, scrolls the element
+     * into the first position of the view.
+     *
+     * @internal
      */
     async mounted(): Promise<void> {
       await this.$nextTick(); // Mounted does not guarantee that child components are mounted too
-      this.firstVisibleItemObserver?.observe(this.$el);
+      this.firstVisibleItemObserver?.observe(this.$el as HTMLElement);
       if (this.scrollTo === this.item.id) {
         this.$el.scrollIntoView();
-        this.$x.emit('ScrollRestored', this.scrollTo);
       }
     }
 
     /**
      * Detaches the observer from the rendered element to prevent memory leaks.
+     *
+     * @internal
      */
     beforeDestroy(): void {
-      this.firstVisibleItemObserver?.unobserve(this.$el);
+      this.firstVisibleItemObserver?.unobserve(this.$el as HTMLElement);
     }
   }
 </script>

@@ -1,8 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import { throttle } from '../../utils/throttle';
-import { XProvide } from '../decorators/injection.decorators';
-import { FirstVisibleItemObserverKey } from './scroll.const';
 import { ScrollDirection } from './scroll.types';
 
 /**
@@ -34,12 +32,6 @@ export default class ScrollMixin extends Vue {
    */
   @Prop({ default: 100 })
   public firstElementThresholdPx!: number;
-
-  /**
-   * First item observer. Initialised after the component has been mounted.
-   */
-  @XProvide(FirstVisibleItemObserverKey)
-  public firstVisibleItemObserver: IntersectionObserver | null = null;
   /**
    * Time duration to ignore the subsequent scroll events after an emission.
    * Higher values will decrease events precision but can prevent performance issues.
@@ -66,7 +58,6 @@ export default class ScrollMixin extends Vue {
    * @internal
    */
   protected direction!: ScrollDirection;
-  protected firstVisibleElement: string | null = null;
   /**
    * Property for getting the previous position of scroll.
    *
@@ -165,28 +156,8 @@ export default class ScrollMixin extends Vue {
         );
       } else {
         this.storeScrollData();
-        this.initialiseFirstElementObserver();
       }
     });
-  }
-
-  /**
-   * Disconnects the {@link ScrollMixin.firstVisibleItemObserver}.
-   *
-   * @internal
-   */
-  beforeDestroy(): void {
-    this.firstVisibleItemObserver?.disconnect();
-  }
-
-  /**
-   * Emits the first visible element `[data-scroll]`.
-   *
-   * @internal
-   */
-  @Watch('firstVisibleElement')
-  protected emitFirstVisibleElement(): void {
-    this.$emit('scroll:at-element', this.firstVisibleElement);
   }
 
   /**
@@ -263,31 +234,6 @@ export default class ScrollMixin extends Vue {
       this.scrollHeight = this.$el.scrollHeight;
       this.clientHeight = this.$el.clientHeight;
     }
-  }
-
-  /**
-   * Creates an `IntersectionObserver` to detect the first visible elements. Children of this
-   * component should register themselves if they want to be observed.
-   *
-   * @internal
-   */
-  protected initialiseFirstElementObserver(): void {
-    this.firstVisibleItemObserver = new IntersectionObserver(
-      entries => {
-        entries.reverse().forEach(entry => {
-          const dataScroll = (entry.target as HTMLElement).dataset.scroll!;
-          if (entry.isIntersecting) {
-            this.firstVisibleElement = dataScroll;
-          } else if (!entry.isIntersecting && this.firstVisibleElement === dataScroll) {
-            this.firstVisibleElement = null;
-          }
-        });
-      },
-      {
-        root: this.$el,
-        rootMargin: '0px 0px -100% 0px'
-      }
-    );
   }
 }
 /*  eslint-enable @typescript-eslint/unbound-method */

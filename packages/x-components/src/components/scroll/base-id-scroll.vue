@@ -5,7 +5,6 @@
     @scroll:at-start="scrollAtStart"
     @scroll:almost-at-end="scrollAlmostAtEnd"
     @scroll:at-end="scrollAtEnd"
-    @scroll:at-element="scrollAtElement"
     v-on="$listeners"
     :id="id"
     :throttleMs="throttleMs"
@@ -16,12 +15,11 @@
 </template>
 
 <script lang="ts">
-  import { mixins } from 'vue-class-component';
+  import Vue from 'vue';
   import { Component, Prop } from 'vue-property-decorator';
-  import { XEvent, XEventPayload } from '../../wiring';
+  import { WireMetadata } from '../../wiring';
   import { XOn } from '../decorators/bus.decorators';
   import BaseScroll from './base-scroll.vue';
-  import MainScrollMixin from './main-scroll.mixin';
   import { ScrollDirection } from './scroll.types';
 
   /**
@@ -34,7 +32,7 @@
   @Component({
     components: { BaseScroll }
   })
-  export default class BaseIdScroll extends mixins(MainScrollMixin) {
+  export default class BaseIdScroll extends Vue {
     /**
      * Time duration to ignore the subsequent scroll events after an emission.
      * Higher values will decrease events precision but can prevent performance issues.
@@ -68,7 +66,7 @@
      * @internal
      */
     protected scroll(position: number): void {
-      this.emitEvent('UserScrolled', position);
+      this.$x.emit('UserScrolled', position, this.createEventMetadata());
     }
 
     /**
@@ -78,7 +76,7 @@
      * @internal
      */
     protected scrollDirectionChange(direction: ScrollDirection): void {
-      this.emitEvent('UserChangedScrollDirection', direction);
+      this.$x.emit('UserChangedScrollDirection', direction, this.createEventMetadata());
     }
 
     /**
@@ -87,7 +85,7 @@
      * @internal
      */
     protected scrollAtStart(): void {
-      this.emitEvent('UserReachedScrollStart');
+      this.$x.emit('UserReachedScrollStart', undefined, this.createEventMetadata());
     }
 
     /**
@@ -97,20 +95,7 @@
      * @internal
      */
     protected scrollAlmostAtEnd(distance: number): void {
-      this.emitEvent('UserAlmostReachedScrollEnd', distance);
-    }
-
-    /**
-     * Emits {@link XEventsTypes.UserScrolledToElement} with the new first visible element.
-     *
-     * @remarks It only emits this event if {@link BaseIdScroll.main} is `true`.
-     * @param element - The `[data-scroll]` value of the first visible element.
-     * @internal
-     */
-    protected scrollAtElement(element: string | null): void {
-      if (this.main) {
-        this.emitEvent('UserScrolledToElement', element ?? '');
-      }
+      this.$x.emit('UserAlmostReachedScrollEnd', distance, this.createEventMetadata());
     }
 
     /**
@@ -119,35 +104,17 @@
      * @internal
      */
     protected scrollAtEnd(): void {
-      this.emitEvent('UserReachedScrollEnd');
+      this.$x.emit('UserReachedScrollEnd', undefined, this.createEventMetadata());
     }
 
     /**
-     * Emits the event corresponding passed as parameter when the user has scrolled.
-     *
-     * @param event - Name of event to emit.
-     * @internal
-     */
-    protected emitEvent<Event extends XEvent>(event: Event): void;
-    /**
-     * Emits the event corresponding passed as parameter when the user has scrolled.
-     *
-     * @param event - Name of event to emit.
-     * @param payload - Data to send in the event like payload. {@link ScrollDirection | number}.
-     * @internal
-     */
-    protected emitEvent<Event extends XEvent>(event: Event, payload: XEventPayload<Event>): void;
-    /**
-     * Emits the event corresponding passed as parameter when the user has scrolled.
-     *
-     * @param event - Name of event to emit.
-     * @param payload - Optional data to send in the event like payload.
-     * {@link ScrollDirection | number}.
+     * Creates a {@link WireMetadata} metadata object for all the emitted events.
      *
      * @internal
+     * @returns A new {@link WireMetadata} object.
      */
-    protected emitEvent<Event extends XEvent>(event: Event, payload?: XEventPayload<Event>): void {
-      this.$x.emit(event, payload as any, { target: this.$el as HTMLElement, id: this.id });
+    protected createEventMetadata(): Partial<WireMetadata> {
+      return { target: this.$el as HTMLElement, id: this.id };
     }
 
     /**

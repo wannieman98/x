@@ -22,8 +22,8 @@
   import { LIST_ITEMS_KEY } from '../../../components/decorators/injection.consts';
   import { XProvide } from '../../../components/decorators/injection.decorators';
   import { State } from '../../../components/decorators/store.decorators';
-  import { NoElement } from '../../../components/no-element';
   import ItemsList from '../../../components/items-list.vue';
+  import { NoElement } from '../../../components/no-element';
   import { xComponentMixin } from '../../../components/x-component.mixin';
   import { InfiniteScroll } from '../../../directives/infinite-scroll/infinite-scroll.types';
   import { searchXModule } from '../x-module';

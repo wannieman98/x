@@ -6,7 +6,6 @@
   import GlobalEvents from 'vue-global-events';
   import { Component, Prop } from 'vue-property-decorator';
   import { WireMetadata } from '../../wiring';
-  import MainScrollMixin from './main-scroll.mixin';
   import ScrollMixin from './scroll.mixin';
   import { ScrollDirection } from './scroll.types';
 
@@ -24,7 +23,7 @@
       GlobalEvents
     }
   })
-  export default class WindowScroll extends mixins(ScrollMixin, MainScrollMixin) {
+  export default class WindowScroll extends mixins(ScrollMixin) {
     /**
      * Tag to identify the main scrollable element.
      *
