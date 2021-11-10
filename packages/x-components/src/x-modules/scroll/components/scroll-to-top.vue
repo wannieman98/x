@@ -16,11 +16,13 @@
 <script lang="ts">
   import Vue from 'vue';
   import { Component, Prop, Watch } from 'vue-property-decorator';
-  import { XOn } from '../../components/decorators/bus.decorators';
-  import { WireMetadata, XEventsTypes } from '../../wiring';
-  import BaseEventButton from '../base-event-button.vue';
-  import { NoElement } from '../no-element';
-  import { ScrollDirection } from './scroll.types';
+  import { xComponentMixin } from '../../../components';
+  import { XOn } from '../../../components/decorators/bus.decorators';
+  import { WireMetadata, XEventsTypes } from '../../../wiring';
+  import BaseEventButton from '../../../components/base-event-button.vue';
+  import { NoElement } from '../../../components/no-element';
+  import { ScrollDirection } from '../../../components/scroll/scroll.types';
+  import { scrollXModule } from '../x-module';
 
   /**
    * Renders a button with a default slot.
@@ -32,9 +34,10 @@
    * @public
    */
   @Component({
+    mixins: [xComponentMixin(scrollXModule)],
     components: { BaseEventButton }
   })
-  export default class BaseScrollToTop extends Vue {
+  export default class ScrollToTop extends Vue {
     /**
      * Animation to use for showing/hiding the button.
      *
@@ -204,19 +207,19 @@ the scroll.
 ```vue
 <template>
   <div>
-    <BaseScrollToTop scroll-id="scrollId" :threshold-px="1000">
+    <ScrollToTop scroll-id="scrollId" :threshold-px="1000">
       <span>Scroll to top</span>
-    </BaseScrollToTop>
+    </ScrollToTop>
   </div>
 </template>
 
 <script>
-  import { BaseScrollToTop } from '@empathyco/x-components';
+  import { ScrollToTop } from '@empathyco/x-components';
 
   export default {
     name: 'ScrollToTopTest',
     components: {
-      BaseScrollToTop
+      ScrollToTop
     }
   };
 </script>

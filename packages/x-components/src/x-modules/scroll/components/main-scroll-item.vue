@@ -7,9 +7,11 @@
   import { Identifiable } from '@empathyco/x-types';
   import Vue from 'vue';
   import { Component, Prop } from 'vue-property-decorator';
-  import { XInject } from '../decorators/injection.decorators';
-  import { NoElement } from '../no-element';
-  import { FirstVisibleItemObserverKey, PendingScrollTo } from './scroll.const';
+  import { State, xComponentMixin } from '../../../components';
+  import { XInject } from '../../../components/decorators/injection.decorators';
+  import { NoElement } from '../../../components/no-element';
+  import { scrollXModule } from '../x-module';
+  import { FirstVisibleItemObserverKey } from './scroll.const';
   import { ScrollVisibilityObserver } from './scroll.types';
 
   /**
@@ -19,6 +21,7 @@
    * @public
    */
   @Component({
+    mixins: [xComponentMixin(scrollXModule)],
     components: { NoElement }
   })
   export default class MainScrollItem extends Vue {
@@ -44,8 +47,8 @@
      *
      * @internal
      */
-    @XInject(PendingScrollTo)
-    public scrollTo!: string | null;
+    @State('scroll', 'pendingScrollTo')
+    public pendingScrollTo!: string;
 
     /**
      * Observer to detect the first visible element.
@@ -58,16 +61,17 @@
     /**
      * Initialise scroll behavior.
      * - Observes the rendered element to detect if it is the first visible item.
-     * - If the rendered element matches the {@link MainScrollItem.scrollTo}, scrolls the element
-     * into the first position of the view.
+     * - If the rendered element matches the {@link MainScrollItem.pendingScrollTo}, scrolls the
+     * element into the first position of the view.
      *
      * @internal
      */
     async mounted(): Promise<void> {
       await this.$nextTick(); // Mounted does not guarantee that child components are mounted too
       this.firstVisibleItemObserver?.observe(this.$el as HTMLElement);
-      if (this.scrollTo === this.item.id) {
+      if (this.pendingScrollTo === this.item.id) {
         this.$el.scrollIntoView();
+        this.$x.emit('ScrollRestoreSucceeded');
       }
     }
 
@@ -95,32 +99,32 @@ This component has no template. It renders whatever you decide. It's purpose is 
 restoring the scroll position so URLs can be shared, and to allow users to smoothly navigate back
 and forth.
 
-To do so, it usually works with the `BaseIdScroll`, and `URLHandler` components.
+To do so, it usually works with the `Scroll`, and `URLHandler` components.
 
 ```vue
 <template>
   <div>
     <SearchInput />
-    <BaseIdScroll main>
+    <Scroll main>
       <ResultsList #result="{ item }">
         <ScrollItem :item="item">
           <img :src="item.images[0]" />
           <p>{{ item.title }}</p>
         </ScrollItem>
       </ResultsList>
-    </BaseIdScroll>
+    </Scroll>
   </div>
 </template>
 
 <script>
-  import { BaseIdScroll, ScrollItem } from '@empathyco/x-components';
+  import { Scroll, ScrollItem } from '@empathyco/x-components';
   import { ResultsList } from '@empathyco/x-components/search';
   import { SearchInput } from '@empathyco/x-components/search-box';
 
   export default {
     name: 'ScrollItemDemo',
     components: {
-      BaseIdScroll,
+      Scroll,
       ResultsList,
       ScrollItem,
       SearchInput

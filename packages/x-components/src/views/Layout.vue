@@ -473,9 +473,9 @@
           </template>
 
           <template #scroll-to-top>
-            <BaseScrollToTop :threshold-px="500" class="x-button--round" scroll-id="main-scroll">
+            <ScrollToTop :threshold-px="500" class="x-button--round" scroll-id="main-scroll">
               <ChevronUp />
-            </BaseScrollToTop>
+            </ScrollToTop>
           </template>
         </MultiColumnMaxWidthLayout>
       </BaseEventsModal>
@@ -521,8 +521,8 @@
   import BaseIdTogglePanel from '../components/panels/base-id-toggle-panel.vue';
   import BaseResultImage from '../components/result/base-result-image.vue';
   import BaseResultLink from '../components/result/base-result-link.vue';
-  import BaseScrollToTop from '../components/scroll/base-scroll-to-top.vue';
-  import MainScrollItem from '../components/scroll/main-scroll-item.vue';
+  import ScrollToTop from '../x-modules/scroll/components/scroll-to-top.vue';
+  import MainScrollItem from '../x-modules/scroll/components/main-scroll-item.vue';
   import SlidingPanel from '../components/sliding-panel.vue';
   import BaseSuggestions from '../components/suggestions/base-suggestions.vue';
   import { infiniteScroll } from '../directives/infinite-scroll/infinite-scroll';
@@ -612,7 +612,7 @@
       BaseKeyboardNavigation,
       BaseResultImage,
       BaseResultLink,
-      BaseScrollToTop,
+      ScrollToTop: ScrollToTop,
       BaseSuggestions,
       BaseVariableColumnGrid,
       CheckTiny,

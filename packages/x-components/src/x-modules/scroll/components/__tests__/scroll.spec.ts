@@ -1,20 +1,20 @@
 import { mount, Wrapper } from '@vue/test-utils';
-import { getDataTestSelector, installNewXPlugin } from '../../../__tests__/utils';
-import BaseIdScroll from '../base-id-scroll.vue';
+import { getDataTestSelector, installNewXPlugin } from '../../../../__tests__/utils';
+import Scroll from '../scroll.vue';
 
-function renderBaseIdScroll({
-  template = '<BaseIdScroll :throttleMs="throttleMs" :id="id"/>',
+function renderScroll({
+  template = '<Scroll :throttleMs="throttleMs" :id="id"/>',
   throttleMs = 200,
   id = 'scrollResults',
   scrollHeight = 800,
   clientHeight = 200,
   distanceToBottom = 100
-}: RenderBaseIdScrollOptions = {}): RenderBaseIdScrollAPI {
+}: RenderScrollOptions = {}): RenderScrollAPI {
   const [, localVue] = installNewXPlugin();
   const wrapperContainer = mount(
     {
       components: {
-        BaseIdScroll
+        Scroll: Scroll
       },
       props: ['throttleMs', 'id', 'distanceToBottom'],
       template
@@ -29,7 +29,7 @@ function renderBaseIdScroll({
     }
   );
 
-  const wrapper = wrapperContainer.findComponent(BaseIdScroll);
+  const wrapper = wrapperContainer.findComponent(Scroll);
   const scrollElement: HTMLElement = wrapperContainer.find(
     getDataTestSelector('base-scroll')
   ).element;
@@ -53,13 +53,13 @@ describe('testing Base Scroll Component', () => {
   afterEach(jest.clearAllTimers);
 
   it('renders default slot contents', () => {
-    const { wrapper } = renderBaseIdScroll({
+    const { wrapper } = renderScroll({
       template: `
-        <BaseIdScroll :id="id">
+        <Scroll :id="id">
           <div data-test="content-scroll">
             <p>scroll content</p>
           </div>
-        </BaseIdScroll>`,
+        </Scroll>`,
       id: 'scrollResults'
     });
 
@@ -68,7 +68,7 @@ describe('testing Base Scroll Component', () => {
   });
 
   it('throttles the scroll event', async () => {
-    const { wrapper, scroll, scrollElement } = renderBaseIdScroll({
+    const { wrapper, scroll, scrollElement } = renderScroll({
       throttleMs: 200,
       id: 'scrollResults'
     });
@@ -106,7 +106,7 @@ describe('testing Base Scroll Component', () => {
 
   // eslint-disable-next-line max-len
   it('emits the `UserChangedScrollDirection` event when the user changes scrolling direction', async () => {
-    const { wrapper, scroll, scrollElement } = renderBaseIdScroll({
+    const { wrapper, scroll, scrollElement } = renderScroll({
       throttleMs: 200,
       id: 'scrollResults'
     });
@@ -155,7 +155,7 @@ describe('testing Base Scroll Component', () => {
   });
 
   it('emits the `UserReachedScrollStart` event when the user scrolls back to the top', async () => {
-    const { wrapper, scroll, scrollElement } = renderBaseIdScroll({
+    const { wrapper, scroll, scrollElement } = renderScroll({
       throttleMs: 200,
       id: 'scrollResults'
     });
@@ -187,7 +187,7 @@ describe('testing Base Scroll Component', () => {
 
   // eslint-disable-next-line max-len
   it('emits `UserAlmostReachedScrollEnd` and`UserReachedScrollEnd` when the user scrolls to the bottom', async () => {
-    const { wrapper, scroll, scrollElement } = renderBaseIdScroll({
+    const { wrapper, scroll, scrollElement } = renderScroll({
       throttleMs: 200,
       id: 'scrollResults',
       scrollHeight: 800,
@@ -257,7 +257,7 @@ describe('testing Base Scroll Component', () => {
   });
 });
 
-interface RenderBaseIdScrollOptions {
+interface RenderScrollOptions {
   /** The template to be rendered. */
   template?: string;
   /** Number for throttle of scroll. */
@@ -272,7 +272,7 @@ interface RenderBaseIdScrollOptions {
   distanceToBottom?: number;
 }
 
-interface RenderBaseIdScrollAPI {
+interface RenderScrollAPI {
   /** The wrapper for the base scroll component. */
   wrapper: Wrapper<Vue>;
   /** The scroll element. */

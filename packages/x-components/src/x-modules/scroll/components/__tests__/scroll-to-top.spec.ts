@@ -1,22 +1,22 @@
 import { mount, Wrapper } from '@vue/test-utils';
 import Vue from 'vue';
-import { installNewXPlugin } from '../../../__tests__/utils';
-import { XEvent, XEventPayload } from '../../../wiring/events.types';
-import BaseScrollToTop from '../base-scroll-to-top.vue';
+import { installNewXPlugin } from '../../../../__tests__/utils';
+import { XEvent, XEventPayload } from '../../../../wiring/events.types';
+import ScrollToTop from '../scroll-to-top.vue';
 
 /**
- * Renders the {@link BaseScrollToTop} with the provided options.
+ * Renders the {@link ScrollToTop} with the provided options.
  *
  * @param options - The options to render the component with.
  * @returns An small API to test the component.
  */
-function renderBaseScrollToTop({
+function renderScrollToTop({
   defaultSlot = '<span>Top</span>',
   scrollId = 'scrollId',
   thresholdPx
-}: RenderBaseScrollToTopOptions = {}): RenderBaseScrollToTopAPI {
+}: RenderScrollToTopOptions = {}): RenderScrollToTopAPI {
   const [, localVue] = installNewXPlugin();
-  const wrapper = mount(BaseScrollToTop, {
+  const wrapper = mount(ScrollToTop, {
     propsData: { scrollId, thresholdPx },
     localVue,
     scopedSlots: {
@@ -24,7 +24,7 @@ function renderBaseScrollToTop({
     }
   });
 
-  const scrollToTopWrapper = wrapper.findComponent(BaseScrollToTop);
+  const scrollToTopWrapper = wrapper.findComponent(ScrollToTop);
 
   return {
     scrollToTopWrapper,
@@ -41,20 +41,20 @@ function renderBaseScrollToTop({
 
 describe('testing Base Scroll To Top component', () => {
   it('renders the content in the slot', async () => {
-    const { scrollToTopWrapper, emitXEvent } = renderBaseScrollToTop();
+    const { scrollToTopWrapper, emitXEvent } = renderScrollToTop();
     await emitXEvent('UserAlmostReachedScrollEnd', 100);
     expect(scrollToTopWrapper.text()).toEqual('Top');
   });
 
   it('shows if a scroll is almost reaching the end and there is no threshold', async () => {
-    const { scrollToTopWrapper, emitXEvent } = renderBaseScrollToTop();
+    const { scrollToTopWrapper, emitXEvent } = renderScrollToTop();
     expect(scrollToTopWrapper.html()).toBe('');
     await emitXEvent('UserAlmostReachedScrollEnd', 100);
     expect(scrollToTopWrapper.html()).not.toBe('');
   });
 
   it('shows if the scroll is over the threshold and user scrolls up', async () => {
-    const { scrollToTopWrapper, emitXEvent } = renderBaseScrollToTop({ thresholdPx: 200 });
+    const { scrollToTopWrapper, emitXEvent } = renderScrollToTop({ thresholdPx: 200 });
     expect(scrollToTopWrapper.html()).toBe('');
 
     await emitXEvent('UserScrolled', 250);
@@ -64,7 +64,7 @@ describe('testing Base Scroll To Top component', () => {
   });
 
   it("emits event with the component's id as payload when clicked", async () => {
-    const { scrollToTopWrapper, emitXEvent, click } = renderBaseScrollToTop();
+    const { scrollToTopWrapper, emitXEvent, click } = renderScrollToTop();
     const listener = jest.fn();
     scrollToTopWrapper.vm.$x.on('UserClickedScrollToTop').subscribe(listener);
 
@@ -77,7 +77,7 @@ describe('testing Base Scroll To Top component', () => {
 
   // eslint-disable-next-line max-len
   it('hides when the scroll direction is up once the scroll has almost reached the end', async () => {
-    const { scrollToTopWrapper, emitXEvent } = renderBaseScrollToTop();
+    const { scrollToTopWrapper, emitXEvent } = renderScrollToTop();
 
     await emitXEvent('UserChangedScrollDirection', 'DOWN');
     await emitXEvent('UserAlmostReachedScrollEnd', 100);
@@ -88,7 +88,7 @@ describe('testing Base Scroll To Top component', () => {
   });
 
   it('hides when the scroll gets lesser than the threshold', async () => {
-    const { scrollToTopWrapper, emitXEvent } = renderBaseScrollToTop({ thresholdPx: 1000 });
+    const { scrollToTopWrapper, emitXEvent } = renderScrollToTop({ thresholdPx: 1000 });
 
     await emitXEvent('UserScrolled', 1100);
     await emitXEvent('UserChangedScrollDirection', 'UP');
@@ -99,7 +99,7 @@ describe('testing Base Scroll To Top component', () => {
   });
 });
 
-interface RenderBaseScrollToTopOptions {
+interface RenderScrollToTopOptions {
   /** The default slot for the component. */
   defaultSlot?: string;
   /** The id of the scroll referring the scroll to top. */
@@ -108,7 +108,7 @@ interface RenderBaseScrollToTopOptions {
   thresholdPx?: number;
 }
 
-interface RenderBaseScrollToTopAPI {
+interface RenderScrollToTopAPI {
   /** The wrapper for the base scroll to top component. */
   scrollToTopWrapper: Wrapper<Vue>;
   /** Clicks the button. */

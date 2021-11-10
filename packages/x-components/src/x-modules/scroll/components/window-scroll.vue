@@ -5,9 +5,11 @@
   import { mixins } from 'vue-class-component';
   import GlobalEvents from 'vue-global-events';
   import { Component, Prop } from 'vue-property-decorator';
-  import { WireMetadata } from '../../wiring';
-  import ScrollMixin from './scroll.mixin';
-  import { ScrollDirection } from './scroll.types';
+  import { xComponentMixin } from '../../../components';
+  import { WireMetadata } from '../../../wiring';
+  import ScrollMixin from '../../../components/scroll/scroll.mixin';
+  import { ScrollDirection } from '../../../components/scroll/scroll.types';
+  import { scrollXModule } from '../x-module';
 
   type ScrollableTag = 'document' | 'window';
 
@@ -19,6 +21,7 @@
    * @public
    */
   @Component({
+    mixins: [xComponentMixin(scrollXModule)],
     components: {
       GlobalEvents
     }

@@ -17,10 +17,12 @@
 <script lang="ts">
   import Vue from 'vue';
   import { Component, Prop } from 'vue-property-decorator';
-  import { WireMetadata } from '../../wiring';
-  import { XOn } from '../decorators/bus.decorators';
-  import BaseScroll from './base-scroll.vue';
-  import { ScrollDirection } from './scroll.types';
+  import { xComponentMixin } from '../../../components/x-component.mixin';
+  import { WireMetadata } from '../../../wiring/wiring.types';
+  import { XOn } from '../../../components/decorators/bus.decorators';
+  import BaseScroll from '../../../components/scroll/base-scroll.vue';
+  import { ScrollDirection } from '../../../components/scroll/scroll.types';
+  import { scrollXModule } from '../x-module';
 
   /**
    * Base scroll component that depending on base scroll component and the user interaction emits
@@ -30,9 +32,10 @@
    * @public
    */
   @Component({
+    mixins: [xComponentMixin(scrollXModule)],
     components: { BaseScroll }
   })
-  export default class BaseIdScroll extends Vue {
+  export default class Scroll extends Vue {
     /**
      * Time duration to ignore the subsequent scroll events after an emission.
      * Higher values will decrease events precision but can prevent performance issues.
@@ -135,7 +138,7 @@
 <docs lang="mdx">
 # Example
 
-The BaseIdScroll is a component that wraps the BaseScroll and provides it for a unique id.
+The Scroll is a component that wraps the BaseScroll and provides it for a unique id.
 
 ## Events
 
@@ -158,21 +161,21 @@ It renders an element with scroll, with the content passed in the `default slot`
 
 ```vue
 <template>
-  <BaseIdScroll id="exampleScrollId" throttleMs="50" distanceToBottom="300">
+  <Scroll id="exampleScrollId" throttleMs="50" distanceToBottom="300">
     <div class="content-scroll">
       <span>content1</span>
       <span>content1</span>
     </div>
-  </BaseIdScroll>
+  </Scroll>
 </template>
 
 <script>
-  import { BaseIdScroll } from '@empathyco/x-components';
+  import { Scroll } from '@empathyco/x-components';
 
   export default {
     name: 'ScrollIdTest',
     components: {
-      BaseIdScroll
+      Scroll
     }
   };
 </script>
@@ -184,7 +187,7 @@ It renders an element with scroll, with the content passed in the `default slot`
 
 ```vue
 <template>
-  <BaseIdScroll
+  <Scroll
     @scroll="scroll"
     @scroll:direction-change="scrollDirectionChange"
     @scroll:at-start="scrollAtStart"
@@ -198,16 +201,16 @@ It renders an element with scroll, with the content passed in the `default slot`
       <span>content1</span>
       <span>content1</span>
     </div>
-  </BaseIdScroll>
+  </Scroll>
 </template>
 
 <script>
-  import { BaseIdScroll } from '@empathyco/x-components';
+  import { Scroll } from '@empathyco/x-components';
 
   export default {
     name: 'ScrollIdTest',
     components: {
-      BaseIdScroll
+      Scroll
     },
     methods: {
       scroll(position) {
@@ -238,21 +241,21 @@ You can use the XEvents subscribing to them.
 
 ```vue
 <template>
-  <BaseIdScroll throttleMs="50" distanceToBottom="300">
+  <Scroll throttleMs="50" distanceToBottom="300">
     <div class="content-scroll">
       <span>content1</span>
       <span>content1</span>
     </div>
-  </BaseIdScroll>
+  </Scroll>
 </template>
 
 <script>
-  import { BaseIdScroll } from '@empathyco/x-components';
+  import { Scroll } from '@empathyco/x-components';
 
   export default {
     name: 'ScrollIdTest',
     components: {
-      BaseIdScroll
+      Scroll
     },
     mounted() {
       this.$x.on('UserScrolled').subscribe(event => {
@@ -281,21 +284,21 @@ Set to false the reset scroll on query change feature which is true by default.
 
 ```vue
 <template>
-  <BaseIdScroll throttleMs="50" distanceToBottom="300" :resetOnQueryChange="false">
+  <Scroll throttleMs="50" distanceToBottom="300" :resetOnQueryChange="false">
     <div class="content-scroll">
       <span>content1</span>
       <span>content1</span>
     </div>
-  </BaseIdScroll>
+  </Scroll>
 </template>
 
 <script>
-  import { BaseIdScroll } from '@empathyco/x-components';
+  import { Scroll } from '@empathyco/x-components';
 
   export default {
     name: 'ScrollIdTest',
     components: {
-      BaseIdScroll
+      Scroll
     },
     mounted() {
       this.$x.on('UserScrolled').subscribe(event => {

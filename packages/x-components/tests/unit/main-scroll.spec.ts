@@ -2,9 +2,9 @@ import { mount } from '@cypress/vue';
 import 'reflect-metadata';
 import Vue from 'vue';
 import { mockedAdapter } from '../../src/adapter/mocked-adapter';
-import BaseIdScroll from '../../src/components/scroll/base-id-scroll.vue';
-import MainScrollItem from '../../src/components/scroll/main-scroll-item.vue';
-import MainScroll from '../../src/components/scroll/main-scroll.vue';
+import Scroll from '../../src/x-modules/scroll/components/scroll.vue';
+import MainScrollItem from '../../src/x-modules/scroll/components/main-scroll-item.vue';
+import MainScroll from '../../src/x-modules/scroll/components/main-scroll.vue';
 import { XPlugin, xPlugin } from '../../src/plugins/x-plugin';
 import { UrlParams } from '../../src/types/url-params';
 
@@ -20,13 +20,13 @@ function renderMainScroll({ itemsCount = 10 }: RenderMainScrollOptions = {}): Re
   return mount(
     {
       components: {
-        BaseIdScroll,
+        Scroll: Scroll,
         MainScroll,
         MainScrollItem
       },
       template: `
         <MainScroll style="height:200px">
-          <BaseIdScroll>
+          <Scroll>
             <MainScrollItem
               v-for="item in items"
               tag="article"
@@ -35,7 +35,7 @@ function renderMainScroll({ itemsCount = 10 }: RenderMainScrollOptions = {}): Re
               style="height:50px">
               {{ item.id }}
             </MainScrollItem>
-          </BaseIdScroll>
+          </Scroll>
         </MainScroll>
       `,
       data() {

@@ -1,13 +1,21 @@
 <script lang="ts">
   import { Component, Prop, Watch } from 'vue-property-decorator';
-  import { UrlParams } from '../../types/url-params';
-  import { XOn } from '../decorators/bus.decorators';
-  import { XProvide } from '../decorators/injection.decorators';
-  import { NoElement } from '../no-element';
-  import { FirstVisibleItemObserverKey, PendingScrollTo } from './scroll.const';
+  import { xComponentMixin } from '../../../components/x-component.mixin';
+  import { State } from '../../../components/decorators/store.decorators';
+  import { XOn } from '../../../components/decorators/bus.decorators';
+  import { XProvide } from '../../../components/decorators/injection.decorators';
+  import { NoElement } from '../../../components/no-element';
+  import { scrollXModule } from '../x-module';
+  import { FirstVisibleItemObserverKey } from './scroll.const';
   import { ScrollVisibilityObserver } from './scroll.types';
 
-  @Component
+  /**
+   * Extends the scroll making it able to sync the first visible element, and allowing
+   * the children position to be restored.
+   */
+  @Component({
+    mixins: [xComponentMixin(scrollXModule)]
+  })
   /* eslint-disable @typescript-eslint/unbound-method */
   export default class MainScroll extends NoElement {
     /**
@@ -16,13 +24,6 @@
      * @public
      */
     public $el!: HTMLElement;
-
-    /**
-     * The last `[data-scroll]` element that has been restored.
-     *
-     * @internal
-     */
-    public lastRestoredScrollTo: string | null = null;
 
     /**
      * If `true`, sets this scroll instance to the main of the application. Being the main
@@ -58,14 +59,6 @@
      */
     @Prop()
     public margin?: string;
-
-    /**
-     * The `[data-scroll]` value of the element that the component will try to scroll into view.
-     *
-     * @public
-     */
-    @XProvide(PendingScrollTo)
-    public scrollTo: string | null = null;
 
     /**
      * If true (default), sets the scroll position to top when an
@@ -105,6 +98,15 @@
             root: this.useWindow ? undefined : this.$el,
             threshold: this.threshold
           });
+
+    /**
+     * Pending identifier scroll position to restore. If it matches the {@link MainScrollItem.item}
+     * `id` property, this component should be scrolled into view.
+     *
+     * @internal
+     */
+    @State('scroll', 'pendingScrollTo')
+    public pendingScrollTo!: string;
 
     /**
      * Creates an `IntersectionObserver` to detect the first visible elements. Children of this
@@ -203,19 +205,6 @@
     }
 
     /**
-     * Saves the `[data-scroll]` value that should try to be restored.
-     *
-     * @param urlParams - The URL parameters, where the `scroll` information is stored.
-     * @internal
-     */
-    @XOn('ParamsLoadedFromUrl')
-    setScrollTo({ scroll }: UrlParams): void {
-      if (scroll) {
-        this.scrollTo = scroll;
-      }
-    }
-
-    /**
      * If there is a pending scroll, starts a countdown to stop trying to restore the scroll.
      *
      * @param pendingScrollTo - The position the scroll should be restored to.
@@ -223,10 +212,11 @@
      */
     @Watch('pendingScrollTo')
     protected failRestoringScroll(pendingScrollTo: string | null): void {
+      // TODO Move this logic to the wiring. A cancelable delay operator is needed
       clearTimeout(this.restoreScrollFailTimeoutId);
       if (pendingScrollTo) {
         this.restoreScrollFailTimeoutId = setTimeout(() => {
-          pendingScrollTo = null;
+          this.$x.emit('ScrollRestoreFailed');
         }, this.restoreScrollTimeoutMs);
       }
     }

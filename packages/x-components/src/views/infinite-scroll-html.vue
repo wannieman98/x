@@ -17,8 +17,8 @@
 <script lang="ts">
   import Vue from 'vue';
   import { Component } from 'vue-property-decorator';
-  import BaseMainScroll from '../components/scroll/window-scroll.vue';
-  import MainScrollItem from '../components/scroll/main-scroll-item.vue';
+  import BaseMainScroll from '../x-modules/scroll/components/window-scroll.vue';
+  import MainScrollItem from '../x-modules/scroll/components/main-scroll-item.vue';
   import { XInstaller } from '../x-installer/x-installer/x-installer';
   import SearchInput from '../x-modules/search-box/components/search-input.vue';
   import ResultsList from '../x-modules/search/components/results-list.vue';

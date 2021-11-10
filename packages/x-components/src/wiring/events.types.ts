@@ -67,9 +67,14 @@ export interface XEventsTypes
   ColumnsNumberProvided: number;
   /**
    * The scroll position has been restored successfully.
-   * * Payload: the identifier of the restored scroll position.
+   * * Payload: none.
    */
-  ScrollRestored: string;
+  ScrollRestoreSucceeded: void;
+  /**
+   * The scroll position has failed to be restored.
+   * * Payload: none.
+   */
+  ScrollRestoreFailed: void;
   /**
    * Any kind of suggestions have been displayed (query-suggestions, popular searches...)
    * * Payload: The displayed {@link @empathyco/x-types#Suggestion | suggestions}.

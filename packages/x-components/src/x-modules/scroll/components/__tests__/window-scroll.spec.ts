@@ -1,22 +1,22 @@
 import { mount, Wrapper } from '@vue/test-utils';
-import { getDataTestSelector, installNewXPlugin } from '../../../__tests__/utils';
-import BaseMainScroll from '../window-scroll.vue';
+import { getDataTestSelector, installNewXPlugin } from '../../../../__tests__/utils';
+import WindowScroll from '../window-scroll.vue';
 
-function renderBaseMainScroll({
-  template = `<BaseMainScroll :throttleMs="throttleMs" :tag="tag"/>`,
+function renderWindowScroll({
+  template = `<WindowScroll :throttleMs="throttleMs" :tag="tag"/>`,
   throttleMs = 200,
   scrollHeight = 800,
   clientHeight = 200,
   distanceToBottom = 100,
   tag,
   showComponent
-}: RenderBaseMainScrollOptions = {}): RenderBaseMainScrollAPI {
+}: RenderWindowScrollOptions = {}): RenderWindowScrollAPI {
   const [, localVue] = installNewXPlugin();
   const wrapperContainer = mount(
     {
       props: ['throttleMs', 'distanceToBottom', 'tag'],
       components: {
-        BaseMainScroll
+        WindowScroll
       },
       template,
       data() {
@@ -78,7 +78,7 @@ describe('testing Main Scroll Component', () => {
 
   describe('html', () => {
     it('throttles the scroll event', async () => {
-      const { wrapperContainer, scrollHtml } = renderBaseMainScroll({
+      const { wrapperContainer, scrollHtml } = renderWindowScroll({
         throttleMs: 200,
         tag: 'html'
       });
@@ -116,7 +116,7 @@ describe('testing Main Scroll Component', () => {
 
     // eslint-disable-next-line max-len
     it('emits the `UserChangedScrollDirection` event when the user changes scrolling direction', async () => {
-      const { wrapperContainer, scrollHtml } = renderBaseMainScroll({
+      const { wrapperContainer, scrollHtml } = renderWindowScroll({
         throttleMs: 200,
         tag: 'html'
       });
@@ -168,7 +168,7 @@ describe('testing Main Scroll Component', () => {
 
     // eslint-disable-next-line max-len
     it('emits the `UserReachedScrollStart` event when the user scrolls back to the top', async () => {
-      const { wrapperContainer, scrollHtml } = renderBaseMainScroll({
+      const { wrapperContainer, scrollHtml } = renderWindowScroll({
         throttleMs: 200,
         tag: 'html'
       });
@@ -200,7 +200,7 @@ describe('testing Main Scroll Component', () => {
 
     // eslint-disable-next-line max-len
     it('emits `UserAlmostReachedScrollEnd` and`UserReachedScrollEnd` when the user scrolls to the bottom', async () => {
-      const { wrapperContainer, scrollHtml } = renderBaseMainScroll({
+      const { wrapperContainer, scrollHtml } = renderWindowScroll({
         throttleMs: 200,
         scrollHeight: 800,
         clientHeight: 200,
@@ -272,9 +272,9 @@ describe('testing Main Scroll Component', () => {
     });
 
     it('does not trigger event when scrolling in body or other element', async () => {
-      const { wrapperContainer, scrollBody, scrollContent } = renderBaseMainScroll({
+      const { wrapperContainer, scrollBody, scrollContent } = renderWindowScroll({
         template: `<div>
-                    <BaseMainScroll :throttleMs="throttleMs" :tag="tag"/>
+                    <WindowScroll :throttleMs="throttleMs" :tag="tag"/>
                     <div data-test="content"></div>
                   </div>`,
         throttleMs: 200,
@@ -299,9 +299,9 @@ describe('testing Main Scroll Component', () => {
     });
 
     it('do not emit event if component is not rendered or is destroyed', async () => {
-      const { wrapperContainer, scrollHtml, setShowComponent } = renderBaseMainScroll({
+      const { wrapperContainer, scrollHtml, setShowComponent } = renderWindowScroll({
         template: `<div v-if="showComponent">
-                    <BaseMainScroll :throttleMs="throttleMs" :tag="tag"/>
+                    <WindowScroll :throttleMs="throttleMs" :tag="tag"/>
                   </div>`,
         throttleMs: 200,
         tag: 'html',
@@ -352,7 +352,7 @@ describe('testing Main Scroll Component', () => {
 
   describe('body', () => {
     it('throttles the scroll event', async () => {
-      const { wrapperContainer, scrollBody } = renderBaseMainScroll({
+      const { wrapperContainer, scrollBody } = renderWindowScroll({
         throttleMs: 200,
         tag: 'body'
       });
@@ -390,7 +390,7 @@ describe('testing Main Scroll Component', () => {
 
     // eslint-disable-next-line max-len
     it('emits the `UserChangedScrollDirection` event when the user changes scrolling direction', async () => {
-      const { wrapperContainer, scrollBody } = renderBaseMainScroll({
+      const { wrapperContainer, scrollBody } = renderWindowScroll({
         throttleMs: 200,
         tag: 'body'
       });
@@ -442,7 +442,7 @@ describe('testing Main Scroll Component', () => {
 
     // eslint-disable-next-line max-len
     it('emits the `UserReachedScrollStart` event when the user scrolls back to the top', async () => {
-      const { wrapperContainer, scrollBody } = renderBaseMainScroll({
+      const { wrapperContainer, scrollBody } = renderWindowScroll({
         throttleMs: 200,
         tag: 'body'
       });
@@ -474,7 +474,7 @@ describe('testing Main Scroll Component', () => {
 
     // eslint-disable-next-line max-len
     it('emits `UserAlmostReachedScrollEnd` and`UserReachedScrollEnd` when the user scrolls to the bottom', async () => {
-      const { wrapperContainer, scrollBody } = renderBaseMainScroll({
+      const { wrapperContainer, scrollBody } = renderWindowScroll({
         throttleMs: 200,
         scrollHeight: 800,
         clientHeight: 200,
@@ -546,9 +546,9 @@ describe('testing Main Scroll Component', () => {
     });
 
     it('does not trigger event when scrolling in document or other element', async () => {
-      const { wrapperContainer, scrollHtml, scrollContent } = renderBaseMainScroll({
+      const { wrapperContainer, scrollHtml, scrollContent } = renderWindowScroll({
         template: `<div>
-                    <BaseMainScroll :throttleMs="throttleMs" :tag="tag"/>
+                    <WindowScroll :throttleMs="throttleMs" :tag="tag"/>
                     <div data-test="content"></div>
                   </div>`,
         throttleMs: 200,
@@ -573,9 +573,9 @@ describe('testing Main Scroll Component', () => {
     });
 
     it('do not emit event if component is not rendered or is destroyed', async () => {
-      const { wrapperContainer, scrollBody, setShowComponent } = renderBaseMainScroll({
+      const { wrapperContainer, scrollBody, setShowComponent } = renderWindowScroll({
         template: `<div v-if="showComponent">
-                    <BaseMainScroll :throttleMs="throttleMs" :tag="tag"/>
+                    <WindowScroll :throttleMs="throttleMs" :tag="tag"/>
                   </div>`,
         throttleMs: 200,
         tag: 'body',
@@ -625,7 +625,7 @@ describe('testing Main Scroll Component', () => {
   });
 });
 
-interface RenderBaseMainScrollOptions {
+interface RenderWindowScrollOptions {
   /** The template to be rendered. */
   template?: string;
   /** Number for throttle of scroll. */
@@ -638,18 +638,18 @@ interface RenderBaseMainScrollOptions {
   distanceToBottom?: number;
   /** Tag where apply the scroll. */
   tag?: 'html' | 'body';
-  /** If it will show the BaseMainScroll or not. */
+  /** If it will show the WindowScroll or not. */
   showComponent?: boolean;
 }
 
-interface RenderBaseMainScrollAPI {
+interface RenderWindowScrollAPI {
   /** The wrapper for the base scroll component. */
   wrapperContainer: Wrapper<Vue>;
   /** Function that dispatch the event scroll document. */
   scrollHtml: (options: { to: number; durationMs: number }) => Promise<void>;
   /** Function that dispatch the event scroll body. */
   scrollBody: (options: { to: number; durationMs: number }) => Promise<void>;
-  /** Function that change variable of showComponent for show or not the BaseMainScroll. */
+  /** Function that change variable of showComponent for show or not the WindowScroll. */
   setShowComponent: (showComponent: boolean) => Promise<void>;
   /** Function that dispatch the event scroll about a element. */
   scrollContent: (options: { to: number; durationMs: number }) => Promise<void>;
