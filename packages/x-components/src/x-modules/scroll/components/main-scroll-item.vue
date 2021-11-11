@@ -107,17 +107,17 @@ To do so, it usually works with the `Scroll`, and `URLHandler` components.
     <SearchInput />
     <Scroll main>
       <ResultsList #result="{ item }">
-        <ScrollItem :item="item">
+        <MainScrollItem :item="item">
           <img :src="item.images[0]" />
           <p>{{ item.title }}</p>
-        </ScrollItem>
+        </MainScrollItem>
       </ResultsList>
     </Scroll>
   </div>
 </template>
 
 <script>
-  import { Scroll, ScrollItem } from '@empathyco/x-components';
+  import { Scroll, MainScrollItem } from '@empathyco/x-components';
   import { ResultsList } from '@empathyco/x-components/search';
   import { SearchInput } from '@empathyco/x-components/search-box';
 
@@ -126,7 +126,7 @@ To do so, it usually works with the `Scroll`, and `URLHandler` components.
     components: {
       Scroll,
       ResultsList,
-      ScrollItem,
+      MainScrollItem,
       SearchInput
     }
   };

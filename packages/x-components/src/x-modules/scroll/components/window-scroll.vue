@@ -89,10 +89,10 @@
 <docs lang="mdx">
 # Example
 
-The BaseMainScroll is a component that manage the states of main scroll that can be document or
-body. The component does the necessary calculations for knowing the direction of scroll, if the
-scroll has reached to start or to end, and is about to reaching to end. The components emits the
-next events and XEvents depending of movement that realize the user:
+The WindowScroll is a component that manage the states of main scroll that can be document or body.
+The component does the necessary calculations for knowing the direction of scroll, if the scroll has
+reached to start or to end, and is about to reaching to end. The components emits the next events
+and XEvents depending of movement that realize the user:
 
 ## Customized usage
 
@@ -100,7 +100,7 @@ next events and XEvents depending of movement that realize the user:
 
 ```vue
 <template>
-  <BaseMainScroll
+  <WindowScroll
     @scroll="scroll"
     @scroll:direction-change="scrollDirectionChange"
     @scroll:at-start="scrollAtStart"
@@ -114,12 +114,12 @@ next events and XEvents depending of movement that realize the user:
 </template>
 
 <script>
-  import { BaseMainScroll } from '@empathyco/x-components';
+  import { WindowScroll } from '@empathyco/x-components';
 
   export default {
     name: 'ScrollIdTest',
     components: {
-      BaseMainScroll
+      WindowScroll
     },
     methods: {
       scroll(position) {
@@ -152,16 +152,16 @@ similar styles the corresponding style for tag body like in the next example.
 
 ```vue
 <template>
-  <BaseMainScroll id="example-main-scroll" throttleMs="100" distanceToBottom="300" tag="body" />
+  <WindowScroll id="example-main-scroll" throttleMs="100" distanceToBottom="300" tag="body" />
 </template>
 
 <script>
-  import { BaseMainScroll } from '@empathyco/x-components';
+  import { WindowScroll } from '@empathyco/x-components';
 
   export default {
     name: 'MainComponent',
     components: {
-      BaseMainScroll
+      WindowScroll
     },
     mounted() {
       this.$x.on('UserScrolled').subscribe(event => {

@@ -355,7 +355,7 @@
                     <NextQueriesList>
                       <BaseVariableColumnGrid :animation="resultsAnimation">
                         <template #result="{ item: result }">
-                          <ScrollItem :item="result">
+                          <MainScrollItem :item="result">
                             <article class="result" style="max-width: 300px">
                               <BaseResultLink :result="result">
                                 <BaseResultImage :result="result" class="x-picture--colored">
@@ -374,7 +374,7 @@
                                 <h1 class="x-title3" data-test="result-text">{{ result.name }}</h1>
                               </BaseResultLink>
                             </article>
-                          </ScrollItem>
+                          </MainScrollItem>
                         </template>
 
                         <template #banner="{ item: banner }">
@@ -595,7 +595,7 @@
       infiniteScroll
     },
     components: {
-      ScrollItem: MainScrollItem,
+      MainScrollItem: MainScrollItem,
       BasePriceFilterLabel,
       AutoProgressBar,
       Banner,
