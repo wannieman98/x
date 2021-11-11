@@ -17,7 +17,7 @@
   @Component({
     mixins: [xComponentMixin(scrollXModule)]
   })
-  export default class BaseMainScroll extends mixins(ScrollMixin) {
+  export default class WindowScroll extends mixins(ScrollMixin) {
     /**
      * Tag to identify the main scrollable element.
      *
@@ -53,8 +53,7 @@
     }
 
     /**
-     * Get the element depends on {@link BaseMainScroll.tag} if is html or body
-     * and listen the event scroll.
+     * Sets the HTML element depending on {@link WindowScroll.tag}, and initialises its events.
      *
      * @internal
      */
@@ -68,10 +67,19 @@
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     render(): void {}
 
+    /**
+     * Cleanup listeners.
+     */
     beforeDestroy(): void {
       this.$el.removeEventListener('scroll', this.throttledStoreScrollData);
     }
 
+    /**
+     * Creates the metadata for the events of this component.
+     *
+     * @returns A {@link WireMetadata} for the events emitted by this component.
+     * @internal
+     */
     protected createXEventMetadata(): Partial<WireMetadata> {
       return { target: this.$el, id: this.id };
     }

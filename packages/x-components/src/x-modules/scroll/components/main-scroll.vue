@@ -12,6 +12,8 @@
   /**
    * Extends the scroll making it able to sync the first visible element, and allowing
    * the children position to be restored.
+   *
+   * @public
    */
   @Component({
     mixins: [xComponentMixin(scrollXModule)]
@@ -178,7 +180,7 @@
     }
 
     /**
-     * Disconnects the {@link VisibilityObserver.intersectionObserver}.
+     * Disconnects the {@link ScrollVisibilityObserver.intersectionObserver}.
      *
      * @internal
      */

@@ -20,6 +20,8 @@ export interface ScrollState {
 
 /**
  * Contains all the state of a scroll component.
+ *
+ * @public
  */
 export interface ScrollComponentState {
   /**
