@@ -1,17 +1,11 @@
-<template>
-  <GlobalEvents @scroll="throttledStoreScrollData" />
-</template>
 <script lang="ts">
   import { mixins } from 'vue-class-component';
-  import GlobalEvents from 'vue-global-events';
   import { Component, Prop } from 'vue-property-decorator';
-  import { xComponentMixin } from '../../../components';
+  import { ScrollDirection, ScrollMixin, xComponentMixin } from '../../../components';
   import { WireMetadata } from '../../../wiring';
-  import ScrollMixin from '../../../components/scroll/scroll.mixin';
-  import { ScrollDirection } from '../../../components/scroll/scroll.types';
   import { scrollXModule } from '../x-module';
 
-  type ScrollableTag = 'document' | 'window';
+  type ScrollableTag = 'html' | 'body';
 
   /**
    * Main scroll component that depending on the user interactivity emits different events for
@@ -21,20 +15,16 @@
    * @public
    */
   @Component({
-    mixins: [xComponentMixin(scrollXModule)],
-    components: {
-      GlobalEvents
-    }
+    mixins: [xComponentMixin(scrollXModule)]
   })
-  export default class WindowScroll extends mixins(ScrollMixin) {
+  export default class BaseMainScroll extends mixins(ScrollMixin) {
     /**
      * Tag to identify the main scrollable element.
      *
      * @public
      */
-    @Prop({ default: 'document' })
+    @Prop({ default: 'html' })
     protected tag!: ScrollableTag;
-
     /**
      * Id to identify the component.
      *
@@ -44,28 +34,42 @@
     protected id!: string;
 
     mounted(): void {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
-      this.$el = document.body;
+      this.initAndListenElement();
       this.$on('scroll', (position: number) => {
         this.$x.emit('UserScrolled', position, this.createXEventMetadata());
       });
-
       this.$on('scroll:direction-change', (direction: ScrollDirection) => {
         this.$x.emit('UserChangedScrollDirection', direction, this.createXEventMetadata());
       });
-
       this.$on('scroll:at-start', () => {
         this.$x.emit('UserReachedScrollStart', undefined, this.createXEventMetadata());
       });
-
       this.$on('scroll:almost-at-end', (distance: number) => {
         this.$x.emit('UserAlmostReachedScrollEnd', distance, this.createXEventMetadata());
       });
-
       this.$on('scroll:at-end', () => {
         this.$x.emit('UserReachedScrollEnd', undefined, this.createXEventMetadata());
       });
+    }
+
+    /**
+     * Get the element depends on {@link BaseMainScroll.tag} if is html or body
+     * and listen the event scroll.
+     *
+     * @internal
+     */
+    protected initAndListenElement(): void {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      this.$el = this.tag === 'html' ? document.documentElement : document.body;
+      this.$el.addEventListener('scroll', this.throttledStoreScrollData);
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    render(): void {}
+
+    beforeDestroy(): void {
+      this.$el.removeEventListener('scroll', this.throttledStoreScrollData);
     }
 
     protected createXEventMetadata(): Partial<WireMetadata> {

@@ -1,3 +1,4 @@
+import { ScrollDirection } from '../../../components/scroll/scroll.types';
 import { XStoreModule } from '../../../store';
 import { Dictionary } from '../../../utils/types';
 
@@ -7,8 +8,36 @@ import { Dictionary } from '../../../utils/types';
  * @public
  */
 export interface ScrollState {
-  position: Dictionary<number>;
+  /**
+   * State data of the scroll components.
+   */
+  data: Dictionary<ScrollComponentState>;
+  /**
+   * The `[data-scroll]` value of the pending to restore scroll.
+   */
   pendingScrollTo: string;
+}
+
+/**
+ * Contains all the state of a scroll component.
+ */
+export interface ScrollComponentState {
+  /**
+   * The position in pixels the user has scrolled down.
+   */
+  position: number;
+  /**
+   * The direction the user is scrolling.
+   */
+  direction: ScrollDirection;
+  /**
+   * True if the user has already reached the end of the scroll panel.
+   */
+  hasReachedEnd: boolean;
+  /**
+   * True if the scroll position is 0.
+   */
+  hasReachedStart: boolean;
 }
 
 /**
@@ -24,8 +53,11 @@ export interface ScrollGetters {}
  * @public
  */
 export interface ScrollMutations {
-  setScrollPosition(scrollPosition: ScrollPosition): void;
   setPendingScrollTo(pendingScrollTo: string): void;
+  setScrollPosition(position: ScrollPositionPayload): void;
+  setScrollDirection(direction: ScrollDirectionPayload): void;
+  setScrollHasReachedStart(hasReachedStart: ScrollPositionReachedPayload): void;
+  setScrollHasReachedEnd(hasReachedEnd: ScrollPositionReachedPayload): void;
 }
 
 /**
@@ -33,11 +65,44 @@ export interface ScrollMutations {
  *
  * @public
  */
-export interface ScrollPosition {
+export interface ScrollPositionPayload {
   /**
    * The amount of pixels scrolled.
    */
   position: number;
+  /**
+   * The identifier of the scroll element.
+   */
+  id: string;
+}
+
+/**
+ * Payload object containing the identifier of the scroll and its direction.
+ *
+ * @public
+ */
+export interface ScrollDirectionPayload {
+  /**
+   * The current direction of the scroll.
+   */
+  direction: ScrollDirection;
+  /**
+   * The identifier of the scroll element.
+   */
+  id: string;
+}
+
+/**
+ * Payload object containing the identifier of the scroll and a boolean indicating if
+ * it has reached certain position.
+ *
+ * @public
+ */
+export interface ScrollPositionReachedPayload {
+  /**
+   * True if it has reached certain position. False otherwise.
+   */
+  value: boolean;
   /**
    * The identifier of the scroll element.
    */

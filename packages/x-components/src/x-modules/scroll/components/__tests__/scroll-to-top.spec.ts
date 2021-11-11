@@ -2,6 +2,7 @@ import { mount, Wrapper } from '@vue/test-utils';
 import Vue from 'vue';
 import { installNewXPlugin } from '../../../../__tests__/utils';
 import { XEvent, XEventPayload } from '../../../../wiring/events.types';
+import { scrollXModule } from '../../x-module';
 import ScrollToTop from '../scroll-to-top.vue';
 
 /**
@@ -15,7 +16,7 @@ function renderScrollToTop({
   scrollId = 'scrollId',
   thresholdPx
 }: RenderScrollToTopOptions = {}): RenderScrollToTopAPI {
-  const [, localVue] = installNewXPlugin();
+  const [, localVue] = installNewXPlugin({ initialXModules: [scrollXModule] });
   const wrapper = mount(ScrollToTop, {
     propsData: { scrollId, thresholdPx },
     localVue,
@@ -28,18 +29,18 @@ function renderScrollToTop({
 
   return {
     scrollToTopWrapper,
-    async click() {
+    click() {
       scrollToTopWrapper.trigger('click');
-      await localVue.nextTick();
+      return localVue.nextTick();
     },
-    async emitXEvent<Event extends XEvent>(event: Event, payload: XEventPayload<Event>) {
+    emitXEvent(event, payload) {
       scrollToTopWrapper.vm.$x.emit(event, payload, { id: 'scrollId' });
-      await scrollToTopWrapper.vm.$nextTick();
+      return localVue.nextTick();
     }
   };
 }
 
-describe('testing Base Scroll To Top component', () => {
+describe('testing Scroll To Top component', () => {
   it('renders the content in the slot', async () => {
     const { scrollToTopWrapper, emitXEvent } = renderScrollToTop();
     await emitXEvent('UserAlmostReachedScrollEnd', 100);

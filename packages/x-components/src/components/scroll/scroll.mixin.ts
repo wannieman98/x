@@ -75,9 +75,12 @@ export default class ScrollMixin extends Vue {
    * The duration of the throttle is configured through the
    * {@link ScrollMixin.throttleMs}.
    *
+   * @returns A throttled version of the function to store the scroll data.
    * @internal
    */
-  protected throttledStoreScrollData = throttle(this.storeScrollData, this.throttleMs);
+  protected get throttledStoreScrollData(): () => void {
+    return throttle(this.storeScrollData, this.throttleMs);
+  }
 
   /**
    * Returns distance missing to end position position.

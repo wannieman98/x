@@ -16,12 +16,12 @@
 <script lang="ts">
   import Vue from 'vue';
   import { Component, Prop, Watch } from 'vue-property-decorator';
-  import { xComponentMixin } from '../../../components';
-  import { XOn } from '../../../components/decorators/bus.decorators';
-  import { WireMetadata, XEventsTypes } from '../../../wiring';
+  import { ScrollDirection, State, xComponentMixin, XOn } from '../../../components';
   import BaseEventButton from '../../../components/base-event-button.vue';
   import { NoElement } from '../../../components/no-element';
-  import { ScrollDirection } from '../../../components/scroll/scroll.types';
+  import { Dictionary } from '../../../utils';
+  import { WireMetadata, XEventsTypes } from '../../../wiring';
+  import { ScrollComponentState } from '../store';
   import { scrollXModule } from '../x-module';
 
   /**
@@ -63,25 +63,32 @@
     public scrollId?: string;
 
     /**
-     * The current position of the target scroll.
+     * State of all the scroll components in this module.
      *
      * @internal
      */
-    protected scrollTop = 0;
+    // TODO: Directly retrieve the needed data in this computed property
+    @State('scroll', 'data')
+    public scrollPositionsMap!: Dictionary<ScrollComponentState>;
 
     /**
-     * The last direction of the target scroll.
+     * The scroll data retrieved for this component.
      *
+     * @returns The scroll data for this component if a valid {@link ScrollToTop.scrollId} has been
+     * passed. Otherwise it returns `null`.
      * @internal
      */
-    protected scrollDirection: ScrollDirection = 'UP';
-
-    /**
-     * Whether if scroll has almost reached the scroll end or not in target scroll.
-     *
-     * @internal
-     */
-    protected hasAlmostReachedScrollEnd = false;
+    protected get scrollData(): ScrollComponentState {
+      return this.scrollId && this.scrollPositionsMap[this.scrollId]
+        ? this.scrollPositionsMap[this.scrollId]
+        : {
+            position: 0,
+            direction: 'UP',
+            hasReachedEnd: false,
+            hasAlmostReachedEnd: false,
+            hasReachedStart: false
+          };
+    }
 
     /**
      * Event that will be emitted when the scroll to top is clicked.
@@ -110,7 +117,7 @@
      * @internal
      */
     protected get isThresholdReached(): boolean {
-      return this.useThresholdStrategy && this.scrollTop > (this.thresholdPx as number);
+      return this.useThresholdStrategy && this.scrollData.position > this.thresholdPx!;
     }
 
     /**
@@ -123,16 +130,13 @@
       return this.useThresholdStrategy ? this.isThresholdReached : this.hasAlmostReachedScrollEnd;
     }
 
+    // TODO Migrate `hasAlmostReachedScrollEnd` to the module
     /**
-     * Verifies if the ids match.
+     * Whether if scroll has almost reached the scroll end or not in target scroll.
      *
-     * @param id - The id of the scroll.
-     * @returns If the id received is the same as the scroll to top id.
      * @internal
      */
-    protected isThisScroll(id?: string): boolean {
-      return id === this.scrollId;
-    }
+    protected hasAlmostReachedScrollEnd = false;
 
     /**
      * Validates when the target scroll component has almost reached the end of the scroll.
@@ -143,37 +147,8 @@
      */
     @XOn('UserAlmostReachedScrollEnd')
     enableHasAlmostReachedScrollEnd(_payload: unknown, metadata: WireMetadata): void {
-      if (this.isThisScroll(metadata.id)) {
+      if (this.scrollId === metadata.id) {
         this.hasAlmostReachedScrollEnd = true;
-      }
-    }
-
-    /**
-     * Updates the scroll direction of the target scroll component.
-     *
-     * @param scrollDirection - The last direction {@link XEventsTypes.UserChangedScrollDirection}.
-     * @param metadata - Associated data of the event, including the id.
-     * @internal
-     */
-    @XOn('UserChangedScrollDirection')
-    storeScrollDirection(scrollDirection: ScrollDirection, metadata: WireMetadata): void {
-      if (this.isThisScroll(metadata.id)) {
-        this.scrollDirection = scrollDirection;
-      }
-    }
-
-    /**
-     * Updates the scrollTop property with the value of the target scroll component.
-     *
-     * @param scrollPosition - The number of pixels that the target has been scrolled
-     * {@link XEventsTypes.UserScrolled}.
-     * @param metadata - Associated data of the event, including the id.
-     * @internal
-     */
-    @XOn('UserScrolled')
-    storeScrollPosition(scrollPosition: number, metadata: WireMetadata): void {
-      if (this.isThisScroll(metadata.id)) {
-        this.scrollTop = scrollPosition;
       }
     }
 
@@ -183,7 +158,7 @@
      * @param scrollDirection - The new scroll direction.
      * @internal
      */
-    @Watch('scrollDirection')
+    @Watch('scrollData.direction')
     updateHasAlmostReachedScrollEnd(scrollDirection: ScrollDirection): void {
       this.hasAlmostReachedScrollEnd = this.hasAlmostReachedScrollEnd && scrollDirection === 'DOWN';
     }
