@@ -26,6 +26,7 @@ import { UrlXModule } from './url';
 export interface XModulesTree {
   device: DeviceXModule;
   empathize: EmpathizeXModule;
+  extraParams: ExtraParamsXModule;
   facets: FacetsXModule;
   historyQueries: HistoryQueriesXModule;
   identifierResults: IdentifierResultsXModule;
@@ -39,7 +40,6 @@ export interface XModulesTree {
   searchBox: SearchBoxXModule;
   tagging: TaggingXModule;
   url: UrlXModule;
-  extraParams: ExtraParamsXModule;
 }
 
 /**

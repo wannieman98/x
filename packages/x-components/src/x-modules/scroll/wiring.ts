@@ -7,7 +7,12 @@ const moduleName = 'scroll';
 
 const wireCommit = namespacedWireCommit(moduleName);
 
-const setScrollPositionWire = wireCommit(
+/**
+ * Saves the scroll position of a container to the store.
+ *
+ * @public
+ */
+export const setScrollPositionWire = wireCommit(
   'setScrollPosition',
   ({ metadata, eventPayload }: WirePayload<number>) => ({
     position: eventPayload,
@@ -15,7 +20,12 @@ const setScrollPositionWire = wireCommit(
   })
 );
 
-const setScrollDirectionWire = wireCommit(
+/**
+ * Saves the scroll direction of a container to the store.
+ *
+ * @public
+ */
+export const setScrollDirectionWire = wireCommit(
   'setScrollDirection',
   ({ metadata, eventPayload }: WirePayload<ScrollDirection>) => ({
     direction: eventPayload,
@@ -23,7 +33,12 @@ const setScrollDirectionWire = wireCommit(
   })
 );
 
-const setScrollReachedEndWire = wireCommit(
+/**
+ * Saves a boolean indicating if the scroll has reached the end of a container to the store.
+ *
+ * @public
+ */
+export const setScrollHasReachedEndWire = wireCommit(
   'setScrollHasReachedEnd',
   ({ metadata, eventPayload }: WirePayload<boolean>) => ({
     value: eventPayload,
@@ -31,7 +46,12 @@ const setScrollReachedEndWire = wireCommit(
   })
 );
 
-const setScrollHasReachedStartWire = wireCommit(
+/**
+ * Saves a boolean indicating if the scroll has reached the start of a container to the store.
+ *
+ * @public
+ */
+export const setScrollHasReachedStartWire = wireCommit(
   'setScrollHasReachedStart',
   ({ metadata, eventPayload }: WirePayload<boolean>) => ({
     value: eventPayload,
@@ -39,12 +59,22 @@ const setScrollHasReachedStartWire = wireCommit(
   })
 );
 
-const setPendingScrollToWire = wireCommit(
+/**
+ * Saves the selector of the item that should be scrolled into the view.
+ *
+ * @public
+ */
+export const setPendingScrollToWire = wireCommit(
   'setPendingScrollTo',
   ({ eventPayload: { scroll } }) => scroll
 );
 
-const clearPendingScrollToWire = wireCommit('setPendingScrollTo', '');
+/**
+ * Resets the selector of the scroll that is pending to restore.
+ *
+ * @public
+ */
+export const clearPendingScrollToWire = wireCommit('setPendingScrollTo', '');
 
 /**
  * Wiring configuration for the {@link ScrollXModule | scroll module}.
@@ -62,12 +92,15 @@ export const scrollWiring = createWiring({
     setScrollHasReachedStartWire
   },
   UserReachedScrollEnd: {
-    setScrollReachedEndWire
+    setScrollHasReachedEndWire
   },
   ParamsLoadedFromUrl: {
     setPendingScrollToWire
   },
   ScrollRestoreSucceeded: {
+    clearPendingScrollToWire
+  },
+  ScrollRestoreFailed: {
     clearPendingScrollToWire
   }
 });
