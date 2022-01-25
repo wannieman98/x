@@ -1,22 +1,24 @@
-import { HttpClient } from '../../../search-adapter/types/empathy/http-clients/http-client.types';
+import { HttpClient, RequestOptions } from '@empathyco/x-adapter';
+
+export type AnyRequestResponse = Record<string, any>;
 
 export interface EndpointAdapterOptions<
-  Request extends Record<string, any>,
-  Response extends Record<string, any>,
-  ApiRequest extends Record<string, any>,
-  ApiResponse extends Record<string, any>
+  Request extends AnyRequestResponse,
+  Response extends AnyRequestResponse,
+  ApiRequest extends AnyRequestResponse,
+  ApiResponse extends AnyRequestResponse
 > {
   endpoint: string | ((request: ApiRequest) => string);
   httpClient?: HttpClient;
   requestMapper?: Mapper<Request, ApiRequest>;
-  responseMapper: Mapper<ApiResponse, Response>;
+  responseMapper?: Mapper<ApiResponse, Response>;
 }
 
 export interface EndpointAdapterFactory<
-  Request extends Record<string, any>,
-  Response extends Record<string, any>,
-  ApiRequest extends Record<string, any>,
-  ApiResponse extends Record<string, any>
+  Request extends AnyRequestResponse,
+  Response extends AnyRequestResponse,
+  ApiRequest extends AnyRequestResponse,
+  ApiResponse extends AnyRequestResponse
 > {
   (options: EndpointAdapterOptions<Request, Response, ApiRequest, ApiResponse>): EndpointAdapter<
     Request,
@@ -26,15 +28,28 @@ export interface EndpointAdapterFactory<
   >;
 }
 
-export interface EndpointAdapterExtends {
-  (adapter: EndpointAdapter, options: Partial<EndpointAdapterOptions>): EndpointAdapter;
+export interface EndpointAdapterExtends<
+  Request extends AnyRequestResponse,
+  Response extends AnyRequestResponse,
+  ApiRequest extends AnyRequestResponse,
+  ApiResponse extends AnyRequestResponse
+> {
+  (
+    adapter: EndpointAdapter<Request, Response, ApiRequest, ApiResponse>,
+    options: Partial<EndpointAdapterOptions<Request, Response, ApiRequest, ApiResponse>>
+  ): EndpointAdapter<Request, Response, ApiRequest, ApiResponse>;
 }
 
-export interface EndpointAdapter {
-  (request: ApiRequest): Promise<Response>;
-  options: EndpointAdapterOptions;
+export interface EndpointAdapter<
+  Request extends AnyRequestResponse,
+  Response extends AnyRequestResponse,
+  ApiRequest extends AnyRequestResponse,
+  ApiResponse extends AnyRequestResponse
+> {
+  (request: Request, httpClientOptions?: RequestOptions): Promise<Response>;
+  options: EndpointAdapterOptions<Request, Response, ApiRequest, ApiResponse>;
 }
 
-interface Mapper<From, To> {
+export interface Mapper<From, To> {
   (from: From, to: To): Partial<To>;
 }
