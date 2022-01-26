@@ -56,8 +56,8 @@ interface Pipe {
 
 export type PathTuple<SomeObject> = {
   [Property in keyof SomeObject]: SomeObject[Property] extends Record<keyof any, unknown>
-    ? `${Property & string}` | `${Property & string}.${PathTuple<SomeObject[Property]>}`
-    : `${Property & string}`;
+    ? [Property & string] | [Property & string, ...PathTuple<SomeObject[Property]>]
+    : [Property & string];
 }[keyof SomeObject];
 
 export type PathValue<SomeObject, Path extends PathTuple<SomeObject>> = Path extends [
