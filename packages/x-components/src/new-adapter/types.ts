@@ -1,6 +1,6 @@
 import { HttpClient, RequestOptions } from '@empathyco/x-adapter';
 
-export type AnyRequestResponse = Record<string, any>;
+export type AnyRequestResponse = any;
 
 export interface EndpointAdapterOptions<
   Request extends AnyRequestResponse,
@@ -52,4 +52,8 @@ export interface EndpointAdapter<
 
 export interface Mapper<From, To> {
   (from: From, to: To): Partial<To>;
+}
+
+export interface MutableMapper<From, To> extends Mapper<From, To> {
+  pipe(mapper: Mapper<any, To>): this;
 }

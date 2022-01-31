@@ -179,11 +179,11 @@ function resultMapperFactory<From,To>(mapper:Mapper<From,To>):Mapper<From,To> {
   return pickAndDrop('content.catalog', 'results', foreach(mapper));
 }
 
-const newResultsMapper: Mapper<any, any> = resultMapperFactory(from, to)=>({
+const newResultsMapper: Mapper<any, any> = resultMapperFactory((from, to)=>({
   ...to,
   miNuevoCampo: from.nuevo_campo
 })
-
+)
 const customResutlsMapper =pickAndDrop('mi.docs', 'content.catalog', resutlsMapper);
 
 endpointAdapterExtends(endpointAdapter,{

@@ -976,13 +976,41 @@ export const searchResponse = {
             id: 'b08648dbd',
             value: 'Accessories',
             count: 1075,
-            filter: 'categoryIds:b08648dbd'
+            filter: 'categoryIds:b08648dbd',
+            values: [
+              {
+                id: '048616815',
+                value: 'Free Items',
+                count: 8,
+                filter: 'categoryIds:048616815'
+              },
+              {
+                id: '78d9b7366',
+                value: 'Apparel',
+                count: 1,
+                filter: 'categoryIds:78d9b7366'
+              }
+            ]
           },
           {
             id: '048616815',
             value: 'Free Items',
             count: 8,
-            filter: 'categoryIds:048616815'
+            filter: 'categoryIds:048616815',
+            children: [
+              {
+                id: '048616815',
+                value: 'Free Items',
+                count: 8,
+                filter: 'categoryIds:048616815'
+              },
+              {
+                id: '78d9b7366',
+                value: 'Apparel',
+                count: 1,
+                filter: 'categoryIds:78d9b7366'
+              }
+            ]
           },
           {
             id: '78d9b7366',
