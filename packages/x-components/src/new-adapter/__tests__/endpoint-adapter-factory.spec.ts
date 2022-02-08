@@ -1,8 +1,7 @@
 import { Result } from '@empathyco/x-types';
-import { cssFullThemeRollupConfig } from '../../../build/rollup.config';
 import { endpointAdapterFactory } from '../endpoint-adapter.factory';
 import { forEachMapper, makeMapperMutable, path, pipeMappers } from '../mappers';
-import { AnyRequestResponse, Mapper } from '../types';
+import { Mapper } from '../types';
 import { searchResponse } from './mock-responses';
 
 const searchEndpoint = 'https://api.staging.empathy.co/search/v1/query/empathy/search';
