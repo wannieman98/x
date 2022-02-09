@@ -1120,7 +1120,12 @@ export const searchResponse = {
     content: []
   },
   banner: {
-    content: []
+    content: [
+      {
+        image: 'image url',
+        url: 'url'
+      }
+    ]
   },
   promoted: {
     content: []

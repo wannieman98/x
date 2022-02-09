@@ -23,15 +23,18 @@ export function path<From, FromTo, To>({
   };
 }
 
-export function selectFrom<From, To>({
-  fromPath = '',
-  mapper
-}: {
-  mapper: Mapper<any, To>;
-  fromPath?: string;
-}): Mapper<From, To> {
+export function as<From, To>(asPath = '', mapper: Mapper<From, To>): Mapper<From, To> {
   return (from, to) => {
-    return mapper(getSafePropertyChain(from, fromPath) as From, to);
+    return createSafePropertyChain(mapper(from, to), asPath);
+  };
+}
+
+export function select<From, To>(selectPath = '', mapper: Mapper<any, To>): Mapper<From, To> {
+  return (from, to) => {
+    return mapper(
+      getSafePropertyChain(from, selectPath) as From,
+      getSafePropertyChain(to, selectPath) as To
+    );
   };
 }
 
@@ -50,37 +53,58 @@ export function pipeMappers<From, To>(
 
 export function forEachMapper<From, To>(mapper: Mapper<From, To>): Mapper<Array<From>, Array<To>> {
   return (from: Array<From>, to: Array<To> = []): Array<To> =>
-    from.reduce((toArray, fromValue, index) => {
-      const toValue = to[index];
-      toArray[index] = mapper(fromValue, toValue) as To;
-      return toArray;
-    }, [] as Array<To>);
+    Array.isArray(from)
+      ? from.reduce((toArray, fromValue, index) => {
+          const toValue = to[index];
+          toArray[index] = mapper(fromValue, toValue) as To;
+          return toArray;
+        }, [] as Array<To>)
+      : to;
 }
 
-export function makeMapperMutable<From, To>(mapper: Mapper<any, To>): MutableMapper<From, To> {
-  const prependMappers: Mapper<any, any>[] = [];
-  const pipedMappers: Mapper<any, any>[] = [];
+export function makeMapperMutable<From, To>(
+  mapper: Mapper<any, To>,
+  { selectPath, asPath }: { selectPath?: string; asPath?: string } = {}
+): MutableMapper<From, To> {
+  let pipedMappers: Mapper<any, any>[] = [];
   let replacedMapper: Mapper<any, any> | null = null;
   const mutableMapper = (from: From, to: To): Partial<To> => {
-    const concatenatedMappers = prependMappers.concat([replacedMapper ?? mapper], pipedMappers);
-    return concatenatedMappers.length > 1
-      ? // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        (pipeMappers<From, To>(concatenatedMappers) as MutableMapper<From, To>)(from, to)
-      : mapper(from, to);
+    let finalMapper = replacedMapper ?? mapper;
+    if (pipedMappers.length > 0) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      finalMapper = pipeMappers<From, To>(finalMapper, ...pipedMappers);
+    }
+    if (selectPath) {
+      finalMapper = select(selectPath, finalMapper);
+    }
+    if (asPath) {
+      finalMapper = as(asPath, finalMapper);
+    }
+
+    return finalMapper(from, to);
   };
   mutableMapper.pipe = (mapper: Mapper<From, To>) => {
     pipedMappers.push(mapper);
     return mutableMapper;
   };
-  mutableMapper.prepend = (mapper: Mapper<From, To>) => {
-    prependMappers.push(mapper);
-    return mutableMapper;
-  };
+
   mutableMapper.replace = (mapper: Mapper<From, To>) => {
+    pipedMappers = [];
     replacedMapper = mapper;
     return mutableMapper;
   };
+
+  mutableMapper.select = (path: string) => {
+    selectPath = path;
+    return mutableMapper;
+  };
+
+  mutableMapper.as = (path: string) => {
+    asPath = path;
+    return mutableMapper;
+  };
+
   return mutableMapper;
 }
 

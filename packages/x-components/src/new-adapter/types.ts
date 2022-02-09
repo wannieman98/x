@@ -56,4 +56,7 @@ export interface Mapper<From, To> {
 
 export interface MutableMapper<From, To> extends Mapper<From, To> {
   pipe(mapper: Mapper<any, To>): this;
+  replace(mapper: Mapper<any, To>): this;
+  select(selectPath: string): this;
+  as(asPath: string): this;
 }

@@ -1,6 +1,6 @@
 import { Result } from '@empathyco/x-types';
 import { endpointAdapterFactory } from '../endpoint-adapter.factory';
-import { forEachMapper, makeMapperMutable, path, pipeMappers } from '../mappers';
+import { forEachMapper, makeMapperMutable, path, pipeMappers, select, as } from '../mappers';
 import { Mapper } from '../types';
 import { searchResponse } from './mock-responses';
 
@@ -88,33 +88,30 @@ describe('test endpoint adapter factory', () => {
     });
 
     const resultMapper = makeMapperMutable(pipeMappers(nameMapper, priceMapper));
-    const resultsMapper = forEachMapper(resultMapper);
-    const searchResultsMapper = path({
-      fromPath: 'data.content',
-      mapper: resultsMapper,
-      fromToPath: '',
-      toPath: 'results'
-    });
+    const resultsMapper = makeMapperMutable(as('results', forEachMapper(resultMapper)));
+    const bannerMapper = makeMapperMutable(({ url, image }) => ({
+      url: url.toUpperCase(),
+      image: image.toUpperCase()
+    }));
+    const bannersMapper = makeMapperMutable(as('banners', forEachMapper(bannerMapper)));
+    const searchResultsMapper = makeMapperMutable(select(' catalog.content', resultsMapper));
+    const searchResultsBanners = makeMapperMutable(select('banner.content', bannersMapper));
+
+    const searchMapper = pipeMappers(searchResultsMapper, searchResultsBanners);
 
     const urlMapper: Mapper<{ url: string }, Result> = ({ url }) => ({ url });
 
-    /*    const newResultMapper = pipeMappers(resultMapper, urlMapper);
-    const newResultsMapper = forEachMapper(newResultMapper);
-    const modifiedSearchMapper = pipeMappers(
-      searchResultsMapper,
-      path('catalog.content', newResultsMapper, 'results')
-    );*/
-
     const endpointAdapter = endpointAdapterFactory({
       endpoint: searchEndpoint,
-      responseMapper: path({
-        fromPath: 'catalog.content',
-        fromToPath: 'data.content',
-        mapper: searchResultsMapper
-      })
+      responseMapper: searchMapper
     });
 
     resultMapper.pipe(urlMapper);
+    bannerMapper.pipe((from, to) => {
+      console.log('from', from);
+      console.log('to', to);
+      return to;
+    });
 
     const mappedResponse = await endpointAdapter({});
 
