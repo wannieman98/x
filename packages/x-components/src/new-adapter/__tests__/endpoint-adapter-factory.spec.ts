@@ -1,6 +1,6 @@
 import { Result } from '@empathyco/x-types';
 import { endpointAdapterFactory } from '../endpoint-adapter.factory';
-import { forEachMapper, makeMapperMutable, path, pipeMappers, select, as } from '../mappers';
+import { forEachMapper, makeMapperMutable, pipeMappers, select, as } from '../mappers';
 import { Mapper } from '../types';
 import { searchResponse } from './mock-responses';
 
