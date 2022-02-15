@@ -14,8 +14,17 @@ export function makeSchemaMutable(schema: Schema): MutableSchema {
       configuredSchema = schema;
       return configuredSchema;
     },
-    printSchema(): string {
-      return JSON.stringify(configuredSchema, null, 2);
+    toString(): string {
+      return JSON.stringify(
+        configuredSchema,
+        (key, value) =>
+          typeof value === 'function'
+            ? ['replace', 'toString', 'extend'].includes(key)
+              ? undefined
+              : (value as string).toString()
+            : value,
+        2
+      );
     }
   };
 }
@@ -24,8 +33,10 @@ function isSchemaAPI(key: string | number): boolean {
   return typeof key === 'string' && ['extend', 'replace', 'printSchema'].includes(key);
 }
 
-export function createMapperFromSchema(schema: Schema): (source: any) => any {
-  const mapper = (source: any): any => {
+export function createMapperFromSchema(
+  schema: Schema
+): (source: any, destination?: any, context?: any) => any {
+  const mapper = (source: any, _destination: any, context: any = {}): any => {
     if (Array.isArray(source)) {
       return source.map(reducer);
     } else {
@@ -40,7 +51,7 @@ export function createMapperFromSchema(schema: Schema): (source: any) => any {
         schema,
         (result, destinationKey, transformer: SchemaTransformer) => {
           if (!isSchemaAPI(destinationKey)) {
-            const value = createMapperFromSchemaTransformer(transformer, mapper)(source);
+            const value = createMapperFromSchemaTransformer(transformer, mapper, context)(source);
             if (value) {
               result[destinationKey] = value;
             }
@@ -56,36 +67,56 @@ export function createMapperFromSchema(schema: Schema): (source: any) => any {
 
 function createMapperFromSchemaTransformer(
   schemaTransformer: SchemaTransformer,
-  parentMapper: (source: any) => any
-): (source: any) => any {
+  parentMapper: (source: any, destination?: any, context?: any) => any,
+  context: any
+): (source: any, destination?: any, context?: any) => any {
   return typeof schemaTransformer === 'function'
-    ? source => schemaTransformer(source)
+    ? source => schemaTransformer(source, context)
     : typeof schemaTransformer === 'string'
-    ? source => getSafePropertyChain(source, schemaTransformer)
-    : schemaTransformer.schema === 'SELF_SCHEMA'
+    ? source => {
+        if (schemaTransformer.startsWith('$context')) {
+          return getSafePropertyChain(context, schemaTransformer.replace('$context.', ''));
+        } else {
+          return getSafePropertyChain(source, schemaTransformer);
+        }
+      }
+    : schemaTransformer.schema === '$self'
     ? source => {
         if (schemaTransformer.path) {
           const value = getSafePropertyChain(source, schemaTransformer.path);
-          return value === undefined ? undefined : parentMapper(value);
+          return value === undefined ? undefined : parentMapper(value, undefined, context);
         } else {
           return undefined;
         }
       }
-    : source =>
-        schemaTransformer.schema !== undefined && schemaTransformer.path !== undefined
-          ? createMapperFromSchema(schemaTransformer.schema as Schema)(
-              getSafePropertyChain(source, schemaTransformer.path)
-            )
-          : undefined;
+    : source => {
+        if (schemaTransformer.schema !== undefined && schemaTransformer.path !== undefined) {
+          const mergedContext = deepMerge(
+            {},
+            context,
+            schemaTransformer.context
+              ? createMapperFromSchema(schemaTransformer.context)(source, undefined, context)
+              : undefined
+          );
+          return createMapperFromSchema(schemaTransformer.schema as Schema)(
+            getSafePropertyChain(source, schemaTransformer.path),
+            undefined,
+            mergedContext
+          );
+        } else {
+          return undefined;
+        }
+      };
 }
 
 export type SchemaTransformer =
   | {
       path?: string;
-      schema?: Schema | 'SELF_SCHEMA';
+      schema?: Schema | '$self';
+      context?: Schema;
     }
   | string
-  | ((source: any) => any);
+  | ((source: any, context?: any) => any);
 
 export interface Schema {
   [destination: string]: SchemaTransformer;
@@ -93,6 +124,6 @@ export interface Schema {
 
 export interface MutableSchema extends Schema {
   extend(schema: Schema): Schema;
-  printSchema(): string;
+  toString(): string;
   replace(schema: Schema): Schema;
 }

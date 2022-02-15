@@ -13,7 +13,7 @@ export const endpointAdapterFactory: EndpointAdapterFactory<
   AnyRequestResponse,
   AnyRequestResponse
 > = function (options) {
-  const adapter: EndpointAdapter<
+  const endpointAdapter: EndpointAdapter<
     AnyRequestResponse,
     AnyRequestResponse,
     AnyRequestResponse,
@@ -35,8 +35,8 @@ export const endpointAdapterFactory: EndpointAdapterFactory<
     );
     return responseMapper(apiResponse, {});
   };
-  adapter.options = options;
-  return adapter;
+  endpointAdapter.options = options;
+  return endpointAdapter;
 };
 
 export const endpointAdapterExtends: EndpointAdapterExtends<

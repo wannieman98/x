@@ -10,9 +10,12 @@ describe('test schema', () => {
       modelName: () => 'Filter',
       children: {
         path: 'values',
-        schema: 'SELF_SCHEMA'
+        schema: '$self'
       },
-      color: 'color.code'
+      color: 'color.code',
+      facetId: '$context.facetId',
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+      miPrueba: (_, context) => context.test.toUpperCase()
     });
 
     const facetSchema = makeSchemaMutable({
@@ -21,7 +24,8 @@ describe('test schema', () => {
       modelName: () => 'Facet',
       filters: {
         path: 'filters',
-        schema: filterSchema
+        schema: filterSchema,
+        context: { facetId: 'facet' }
       }
     });
 
@@ -39,7 +43,11 @@ describe('test schema', () => {
       filter: 'filter'
     });
 
-    const mappedResponse = createMapperFromSchema(searchFacetsSchema)(searchResponse);
+    console.log(searchFacetsSchema.toString());
+
+    const mappedResponse = createMapperFromSchema(searchFacetsSchema)(searchResponse, undefined, {
+      test: 'prueba'
+    });
     expect(mappedResponse.facets).toBeDefined();
     expect(Array.isArray(mappedResponse.facets)).toBe(true);
     expect(mappedResponse.facets).toHaveLength(3);
@@ -52,7 +60,8 @@ describe('test schema', () => {
           filters: expect.arrayContaining([
             expect.objectContaining({
               id: expect.any(String),
-              totalResults: expect.any(Number)
+              totalResults: expect.any(Number),
+              facetId: expect.any(String)
             })
           ])
         })
