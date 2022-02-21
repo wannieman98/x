@@ -1,31 +1,65 @@
+import { FacetModelName, FilterModelName, RangeValue } from '@empathyco/x-types';
 import { createMapperFromSchema, makeSchemaMutable } from '../schemas';
 import { searchResponse } from './mock-responses';
 
 describe('test schema', () => {
   it('creates an Endpoint Adapter and uses simple mappers', () => {
+    function numberRangeFilterTransformer(
+      { value }: { value: string },
+      { facetModelName }: any
+    ): RangeValue | undefined {
+      if (facetModelName === 'NumberRangeFacet') {
+        const [min, max] = value.split('-');
+        return {
+          min: Number.parseFloat(min) || null,
+          max: Number.parseFloat(max) || null
+        };
+      }
+    }
+
+    function facetModelNameTransformer({ facet }: { facet: string }): FacetModelName {
+      switch (facet) {
+        case 'categoryPaths':
+          return 'HierarchicalFacet';
+        case 'price':
+          return 'NumberRangeFacet';
+        default:
+          return 'SimpleFacet';
+      }
+    }
+
+    function filterModelNameTransformer(_: any, { facetModelName }: any): FilterModelName {
+      switch (facetModelName) {
+        case 'HierarchicalFacet':
+          return 'HierarchicalFilter';
+        case 'NumberRangeFacet':
+          return 'NumberRangeFilter';
+        default:
+          return 'SimpleFilter';
+      }
+    }
+
     const filterSchema = makeSchemaMutable({
       id: 'id',
       totalResults: 'count',
       label: 'value',
-      modelName: () => 'Filter',
+      modelName: filterModelNameTransformer,
+      range: numberRangeFilterTransformer,
       children: {
         path: 'values',
         schema: '$self'
       },
-      color: 'color.code',
-      facetId: '$context.facetId',
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-      miPrueba: (_, context) => context.test.toUpperCase()
+      facetId: '$context.facetId'
     });
 
     const facetSchema = makeSchemaMutable({
       id: 'facet',
       label: 'facet',
-      modelName: () => 'Facet',
+      modelName: facetModelNameTransformer,
       filters: {
         path: 'filters',
         schema: filterSchema,
-        context: { facetId: 'facet' }
+        context: { facetId: 'facet', facetModelName: facetModelNameTransformer }
       }
     });
 
@@ -39,7 +73,6 @@ describe('test schema', () => {
     searchFacetsSchema.extend({ facets: { path: 'catalog.facets' } });
     facetSchema.extend({ filters: { path: 'values' } });
     filterSchema.extend({
-      children: { path: 'children' },
       filter: 'filter'
     });
 

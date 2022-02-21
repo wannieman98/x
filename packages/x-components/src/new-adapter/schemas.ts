@@ -52,7 +52,7 @@ export function createMapperFromSchema(
         (result, destinationKey, transformer: SchemaTransformer) => {
           if (!isSchemaAPI(destinationKey)) {
             const value = createMapperFromSchemaTransformer(transformer, mapper, context)(source);
-            if (value) {
+            if (value !== undefined) {
               result[destinationKey] = value;
             }
           }
@@ -112,7 +112,7 @@ function createMapperFromSchemaTransformer(
 export type SchemaTransformer =
   | {
       path?: string;
-      schema?: Schema | '$self';
+      schema?: Schema | '$self' | ((source: any, context?: any) => any);
       context?: Schema;
     }
   | string
