@@ -36,6 +36,11 @@ module.exports = function ({ theme }) {
         alignSelf: 'center',
         color: 'white'
       }
+    },
+    '.icon': {
+      width: theme('spacing.16'),
+      height: theme('spacing.16'),
+      color: 'currentColor'
     }
   };
 };

@@ -11,8 +11,8 @@ module.exports = {
     };
   },
   theme: {
-    colors: {
+    /*    colors: {
       neutral: { 500: 'red' }
-    }
+    }*/
   }
 };
