@@ -34,6 +34,11 @@ if (process.env.NODE_ENV !== 'production') {
       component: () => import('./views/layouts/single-column-layout.vue')
     },
     {
+      path: '/tailwind',
+      name: 'Tailwind',
+      component: () => import('./views/tailwind.vue')
+    },
+    {
       path: '/design-system',
       name: 'Design System',
       component: () => import('./views/design-system/design-system.vue')
