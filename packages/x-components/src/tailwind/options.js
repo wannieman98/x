@@ -1,18 +1,18 @@
 module.exports = {
   components({ theme }) {
     return {
-      /* '.btn': {
+      '.btn': {
         backgroundColor: 'green',
         color: theme('colors.neutral.500'),
         '&-lg': {
           '--x-size-height': theme('spacing.64')
         }
-      }*/
+      }
     };
   },
   theme: {
-    /*    colors: {
-      neutral: { 500: 'red' }
-    }*/
+    colors: {
+      neutral: { 500: 'red', 100: 'orange' }
+    }
   }
 };
