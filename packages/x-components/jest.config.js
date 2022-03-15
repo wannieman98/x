@@ -1,5 +1,10 @@
 module.exports = {
   preset: 'ts-jest',
+  globals: {
+    'ts-jest': {
+      isolatedModules: true
+    }
+  },
   transform: {
     '^.+\\.vue$': '@vue/vue2-jest',
     '^.+\\.scss$': 'jest-scss-transform'
@@ -8,5 +13,6 @@ module.exports = {
   setupFilesAfterEnv: ['./jest.setup.ts'],
   // jest 27 changes the default environment to node instead of jsdom
   // https://jestjs.io/blog/2021/05/25/jest-27#flipping-defaults
-  testEnvironment: 'jsdom'
+  testEnvironment: 'jsdom',
+  maxWorkers: '50%'
 };
