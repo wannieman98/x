@@ -1,13 +1,9 @@
 module.exports = {
   preset: 'ts-jest',
-  globals: {
-    'ts-jest': {
-      isolatedModules: true
-    }
-  },
   transform: {
     '^.+\\.vue$': '@vue/vue2-jest',
-    '^.+\\.scss$': 'jest-scss-transform'
+    '^.+\\.scss$': 'jest-scss-transform',
+    '^.+\\.ts?$': 'esbuild-jest'
   },
   testMatch: ['<rootDir>/src/**/*.spec.ts'],
   setupFilesAfterEnv: ['./jest.setup.ts'],
