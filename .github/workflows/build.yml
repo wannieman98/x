@@ -1,6 +1,6 @@
 name: Check branch is releasable and release alpha on main branch update
-on: [push, pull_request]
-concurrency: 
+on: [ push, pull_request ]
+concurrency:
   group: ${{ github.workflow }}-${{ github.ref_name }}
   cancel-in-progress: true
 jobs:
@@ -12,12 +12,26 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.SUPPORT_TOKEN }}
+      - name: Cache multiple paths
+        id: cache-node-modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            **/node_modules
+            ~/.cache/Cypress
+          key: node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install lerna and all packages
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
         run: npm ci
+      - name: Build
+        if: steps.cache-node-modules.outputs.cache-hit == 'true'
+        run: npm run build
       - name: Run linter in all packages
         run: npm run lint
-      - name: Run tests in all packages
-        run: npm run test
+      - name: Run unit tests in all packages
+        run: npm run test:unit
+      - name: Run e2e tests in all packages
+        run: npm run test:e2e
       - name: Release alpha on non-release pushes to main branch
         if: ${{ github.ref_name == 'main' && github.actor != 'support-empathy' && !startsWith(github.event.head_commit.message, 'chore(release):') }}
         uses: ./.github/actions/release-alpha

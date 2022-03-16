@@ -33,7 +33,8 @@
     "postbuild": "npm pack",
     "prepublishOnly": "npm run build",
     "prebuild": "npm run clean",
-    "test": "jest"
+    "test": "jest",
+    "test:unit": "jest"
   },
   "dependencies": {
     "tslib": "~2.3.0"

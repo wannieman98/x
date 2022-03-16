@@ -26,7 +26,8 @@
   "scripts": {
     "build": "tsc",
     "postbuild": "npm pack",
-    "test": "jest -i"
+    "test": "jest -i",
+    "test:unit": "jest"
   },
   "dependencies": {
     "@empathyco/x-deep-merge": "^1.3.0-alpha.3"

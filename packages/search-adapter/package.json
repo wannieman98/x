@@ -36,6 +36,7 @@
     "postbuild": "npm pack",
     "prepublishOnly": "npm run build",
     "test": "jest",
+    "test:unit": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage"
   },
