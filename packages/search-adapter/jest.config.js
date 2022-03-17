@@ -3,5 +3,10 @@ module.exports = {
   testEnvironment: 'jsdom',
   setupFilesAfterEnv: ['./src/__tests__/tests.setup.ts'],
   testMatch: ['<rootDir>/**/*.spec.ts'],
-  modulePaths: ["node_modules"] //TODO: Delete this when the facets refactor is done [EX-3505]
+  modulePaths: ['node_modules'],
+  globals: {
+    'ts-jest': {
+      isolatedModules: true
+    }
+  }
 };
