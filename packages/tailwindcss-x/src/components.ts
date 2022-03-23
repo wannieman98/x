@@ -1,4 +1,6 @@
-module.exports = function ({ theme }) {
+import { TailwindHelpers } from './types';
+
+export default function ({ theme }: TailwindHelpers) {
   return {
     '.btn': {
       '--x-size-height': theme('spacing.32'),
@@ -7,13 +9,13 @@ module.exports = function ({ theme }) {
       alignContent: 'center',
       justifyContent: 'center',
       flexFlow: 'row wrap',
-      backgroundColor: theme('colors.neutral.500'),
-      color: theme('colors.neutral.100'),
+      backgroundColor: theme('colors.neutral.75'),
+      color: theme('colors.neutral.0'),
       height: 'var(--x-size-height)',
       gap: theme('spacing.4'),
       paddingInlineStart: theme('spacing.16'),
       paddingInlineEnd: theme('spacing.16'),
-      borderRadius: theme('button.borderRadius'),
+      borderRadius: theme('borderRadius.sm'),
       fontSize: theme('fontSize.base'),
       '&-lg': {
         '--x-size-height': theme('spacing.48'),
@@ -33,14 +35,17 @@ module.exports = function ({ theme }) {
         paddingInlineEnd: 0
       },
       '& > .icon': {
-        alignSelf: 'center',
-        color: 'white'
+        alignSelf: 'center'
       }
     },
     '.icon': {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
       width: theme('spacing.16'),
       height: theme('spacing.16'),
-      color: 'currentColor'
+      color: 'currentColor',
+      fontSize: theme('spacing.8')
     }
   };
-};
+}

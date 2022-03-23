@@ -1,5 +1,3 @@
-const plugin = require('./src/tailwind/plugin');
-const options = require('./src/tailwind/options');
 module.exports = {
   content: [
     './index.html',
@@ -8,5 +6,5 @@ module.exports = {
     './src/x-modules/**/components/**/*.vue'
   ],
   prefix: 'x-',
-  plugins: [plugin(options)]
+  plugins: []
 };

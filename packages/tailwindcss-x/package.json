@@ -1,0 +1,33 @@
+{
+  "name": "@empathyco/tailwindcss-x",
+  "version": "0.0.0",
+  "description": "Tailwindcss plugin for the X Design System",
+  "author": "Empathy Systems Corporation S.L.",
+  "license": "Apache-2.0",
+  "keywords": [
+    "tailwindcss",
+    "search",
+    "interface",
+    "empathy",
+    "frontend"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/empathyco/x.git",
+    "directory": "packages/tailwindcss-x"
+  },
+  "scripts": {
+    "dev": "vite --config vite.config.ts",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@empathyco/x-deep-merge": "^1.3.0-alpha.3"
+  },
+  "devDependencies": {
+    "autoprefixer": "~10.4.4",
+    "tailwindcss": "~3.0.23",
+    "typescript": "~4.6.2",
+    "vite": "~2.8.0"
+  }
+}
