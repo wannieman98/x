@@ -118,9 +118,9 @@
   import { Component } from 'vue-property-decorator';
   import ChevronUp from '../../components/icons/chevron-up.vue';
   import FiltersIcon from '../../components/icons/filters.vue';
-  // eslint-disable-next-line max-len
-  import MultiColumnMaxWidthLayout from '../../components/layouts/multi-column-max-width-layout.vue';
   import BaseIdTogglePanelButton from '../../components/panels/base-id-toggle-panel-button.vue';
+  // eslint-disable-next-line max-len
+  import MultiColumnMaxWidthLayout from '../../x-modules/layouts/components/multi-column-max-width-layout.vue';
 
   @Component({
     components: {

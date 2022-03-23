@@ -105,9 +105,9 @@
 <script lang="ts">
   import Vue from 'vue';
   import { Component } from 'vue-property-decorator';
-  import { SingleColumnLayout } from '../../components';
   import FiltersIcon from '../../components/icons/filters.vue';
   import BaseIdModalOpen from '../../components/modals/base-id-modal-open.vue';
+  import SingleColumnLayout from '../../x-modules/layouts/components/single-column-layout.vue';
 
   @Component({
     components: {

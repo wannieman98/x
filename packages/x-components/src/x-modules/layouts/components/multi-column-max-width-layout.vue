@@ -95,10 +95,12 @@
   import Vue from 'vue';
   import Component, { mixins } from 'vue-class-component';
   import { Prop } from 'vue-property-decorator';
-  import MainScroll from '../../x-modules/scroll/components/main-scroll.vue';
-  import Scroll from '../../x-modules/scroll/components/scroll.vue';
-  import AnimateWidth from '../animations/animate-width.vue';
-  import BaseIdTogglePanel from '../panels/base-id-toggle-panel.vue';
+  import { xComponentMixin } from '../../../components/x-component.mixin';
+  import AnimateWidth from '../../../components/animations/animate-width.vue';
+  import BaseIdTogglePanel from '../../../components/panels/base-id-toggle-panel.vue';
+  import MainScroll from '../../scroll/components/main-scroll.vue';
+  import Scroll from '../../scroll/components/scroll.vue';
+  import { layoutsXModule } from '../x-module';
   import LayoutsMixin from './layouts.mixin';
 
   /**
@@ -107,6 +109,7 @@
    * @public
    */
   @Component({
+    mixins: [xComponentMixin(layoutsXModule)],
     components: { BaseIdTogglePanel, MainScroll, Scroll }
   })
   export default class MultiColumnMaxWidthLayout extends mixins(LayoutsMixin) {
@@ -157,7 +160,7 @@
 </style>
 
 <style lang="scss" scoped>
-  @import '../../design-system/utilities/dev-mode';
+  @import '../../../design-system/utilities/dev-mode';
 
   .x-layout {
     // custom properties

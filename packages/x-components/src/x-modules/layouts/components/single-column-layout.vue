@@ -71,13 +71,16 @@
 
 <script lang="ts">
   import Vue from 'vue';
-  import { mixins } from 'vue-class-component';
-  import { Component, Prop } from 'vue-property-decorator';
-  import MainScroll from '../../x-modules/scroll/components/main-scroll.vue';
-  import Scroll from '../../x-modules/scroll/components/scroll.vue';
-  import { animateTranslate } from '../animations/animate-translate/animate-translate.factory';
-  import BaseIdModal from '../modals/base-id-modal.vue';
-  import BaseScroll from '../scroll/base-scroll.vue';
+  import Component, { mixins } from 'vue-class-component';
+  import { Prop } from 'vue-property-decorator';
+  // eslint-disable-next-line max-len
+  import { animateTranslate } from '../../../components/animations/animate-translate/animate-translate.factory';
+  import BaseIdModal from '../../../components/modals/base-id-modal.vue';
+  import BaseScroll from '../../../components/scroll/base-scroll.vue';
+  import { xComponentMixin } from '../../../components/x-component.mixin';
+  import MainScroll from '../../scroll/components/main-scroll.vue';
+  import Scroll from '../../scroll/components/scroll.vue';
+  import { layoutsXModule } from '../x-module';
   import LayoutsMixin from './layouts.mixin';
 
   /**
@@ -86,6 +89,7 @@
    * @public
    */
   @Component({
+    mixins: [xComponentMixin(layoutsXModule)],
     components: { BaseIdModal, BaseScroll, MainScroll, Scroll }
   })
   export default class SingleColumnLayout extends mixins(LayoutsMixin) {
@@ -100,7 +104,7 @@
 </script>
 
 <style scoped lang="scss">
-  @import '../../design-system/utilities/dev-mode';
+  @import '../../../design-system/utilities/dev-mode';
 
   .x-layout {
     display: grid;

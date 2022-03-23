@@ -7,6 +7,7 @@ import { ExtraParamsXModule } from './extra-params';
 import { FacetsXModule } from './facets/x-module';
 import { HistoryQueriesXModule } from './history-queries/x-module';
 import { IdentifierResultsXModule } from './identifier-results/x-module';
+import { LayoutsXModule } from './layouts/x-module';
 import { NextQueriesXModule } from './next-queries/x-module';
 import { PopularSearchesXModule } from './popular-searches/x-module';
 import { QuerySuggestionsXModule } from './query-suggestions/x-module';
@@ -30,6 +31,7 @@ export interface XModulesTree {
   facets: FacetsXModule;
   historyQueries: HistoryQueriesXModule;
   identifierResults: IdentifierResultsXModule;
+  layouts: LayoutsXModule;
   nextQueries: NextQueriesXModule;
   popularSearches: PopularSearchesXModule;
   querySuggestions: QuerySuggestionsXModule;

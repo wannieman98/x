@@ -89,9 +89,9 @@
   import ChevronRight from '../../components/icons/chevron-right.vue';
   import Cross from '../../components/icons/cross.vue';
   import FiltersIcon from '../../components/icons/filters.vue';
-  // eslint-disable-next-line max-len
-  import FixedHeaderAndAsidesLayout from '../../components/layouts/fixed-header-and-asides-layout.vue';
   import BaseIdModalOpen from '../../components/modals/base-id-modal-open.vue';
+  // eslint-disable-next-line max-len
+  import FixedHeaderAndAsidesLayout from '../../x-modules/layouts/components/fixed-header-and-asides-layout.vue';
 
   @Component({
     components: {

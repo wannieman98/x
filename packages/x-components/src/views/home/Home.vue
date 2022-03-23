@@ -451,8 +451,6 @@
   import Nq1 from '../../components/icons/nq-1.vue';
   import SearchIcon from '../../components/icons/search.vue';
   import { BaseKeyboardNavigation } from '../../components/index';
-  // eslint-disable-next-line max-len
-  import MultiColumnMaxWidthLayout from '../../components/layouts/multi-column-max-width-layout.vue';
   import LocationProvider from '../../components/location-provider.vue';
   import BaseEventsModalClose from '../../components/modals/base-events-modal-close.vue';
   import BaseEventsModalOpen from '../../components/modals/base-events-modal-open.vue';
@@ -485,6 +483,8 @@
   import SelectedFilters from '../../x-modules/facets/components/lists/selected-filters.vue';
   import SlicedFilters from '../../x-modules/facets/components/lists/sliced-filters.vue';
   import SortedFilters from '../../x-modules/facets/components/lists/sorted-filters.vue';
+  // eslint-disable-next-line max-len
+  import MultiColumnMaxWidthLayout from '../../x-modules/layouts/components/multi-column-max-width-layout.vue';
   import NextQueriesList from '../../x-modules/next-queries/components/next-queries-list.vue';
   import NextQueries from '../../x-modules/next-queries/components/next-queries.vue';
   import { NextQuery } from '../../x-modules/next-queries/index';

@@ -82,12 +82,14 @@
 </template>
 
 <script lang="ts">
-  import { Component } from 'vue-property-decorator';
-  import { mixins } from 'vue-class-component';
-  import MainScroll from '../../x-modules/scroll/components/main-scroll.vue';
-  import { animateTranslate } from '../animations/animate-translate/animate-translate.factory';
-  import BaseIdModal from '../modals/base-id-modal.vue';
-  import Scroll from '../../x-modules/scroll/components/scroll.vue';
+  import Component, { mixins } from 'vue-class-component';
+  // eslint-disable-next-line max-len
+  import { animateTranslate } from '../../../components/animations/animate-translate/animate-translate.factory';
+  import BaseIdModal from '../../../components/modals/base-id-modal.vue';
+  import { xComponentMixin } from '../../../components/x-component.mixin';
+  import MainScroll from '../../../x-modules/scroll/components/main-scroll.vue';
+  import Scroll from '../../../x-modules/scroll/components/scroll.vue';
+  import { layoutsXModule } from '../x-module';
   import LayoutsMixin from './layouts.mixin';
 
   /**
@@ -96,6 +98,7 @@
    * @public
    */
   @Component({
+    mixins: [xComponentMixin(layoutsXModule)],
     components: {
       BaseIdModal,
       MainScroll,
@@ -118,7 +121,7 @@
 </script>
 
 <style scoped lang="scss">
-  @import '../../design-system/utilities/dev-mode';
+  @import '../../../design-system/utilities/dev-mode';
 
   .x-layout {
     // custom properties

@@ -4,7 +4,6 @@ export * from './column-picker';
 export * from './currency';
 export * from './filters';
 export * from './icons';
-export * from './layouts';
 export * from './modals';
 export * from './panels';
 export * from './result';
