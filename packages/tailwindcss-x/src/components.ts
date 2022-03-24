@@ -50,27 +50,12 @@ export default function components({ theme }: TailwindHelpers) {
   };
 }
 
-type CSSTreeNode = Partial<CSSStyleDeclaration> & CSSTree;
+type VarSelector = `--${string}`;
+type ChildBlockKey = `.${string}` | `&${string}`;
 
-interface CSSTree {
-  [className: string]: CSSTreeNode;
-}
-
-export type ComponentsDefinition = DeepPartial<ReturnType<typeof components>>;
-
-type Components = ReturnType<typeof components>;
-export type ComponentsDefinition_<CurrentComponents = Components> = {
-  [Key in
-    | keyof CurrentComponents
-    | `--${string}`
-    | `&${string}`]?: Key extends keyof CurrentComponents
-    ? CurrentComponents[Key] extends object
-      ? ComponentsDefinition_<CurrentComponents[Key]>
-      : CurrentComponents[Key]
-    : Key extends keyof CSSStyleDeclaration
-    ? CSSStyleDeclaration[Key]
-    : 'aqui';
+type ComponentsCSS = {
+  [Key: ChildBlockKey]: ComponentsCSS & Partial<CSSStyleDeclaration>;
+  [Key: VarSelector]: string;
 };
 
-type Test = 'something' | string;
-const t: Test = 'something';
+export type ComponentsDefinition = DeepPartial<ReturnType<typeof components>> | ComponentsCSS;

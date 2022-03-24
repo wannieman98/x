@@ -6,10 +6,14 @@ export default {
     return {
       '.btn': {
         backgroundColor: 'blue',
-        color: theme('colors.neutral.500'),
-        '&-lg': {}
+        color: theme('colors.neutral.50'),
+        '&-lg': {
+          color: theme('colors.neutral.75')
+        }
       },
-      '.icon': {}
+      '.icon': {
+        color: '#000000'
+      }
     };
   },
   dynamicComponents(_tailwindHelpers: TailwindHelpers) {
