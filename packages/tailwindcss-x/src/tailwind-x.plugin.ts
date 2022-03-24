@@ -21,7 +21,7 @@ export default plugin.withOptions(
                 backgroundColor: value['50'],
                 color: value['25'] || theme('white')
               },
-              options.dynamicComponents?.(tailwindHelpers).btn(value)
+              options.dynamicComponents?.(tailwindHelpers)?.btn(value)
             )
         },
         { values: theme('colors') }

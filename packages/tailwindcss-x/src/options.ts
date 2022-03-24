@@ -1,19 +1,15 @@
+import { ComponentsDefinition } from './components';
 import { TailwindHelpers } from './types';
 
 export default {
-  components({ theme }: TailwindHelpers) {
+  components({ theme }: TailwindHelpers): ComponentsDefinition {
     return {
       '.btn': {
         backgroundColor: 'blue',
         color: theme('colors.neutral.500'),
-        '&-lg': {
-          '--x-size-height': theme('spacing.64')
-        },
-        height: '40px'
+        '&-lg': {}
       },
-      '.btn-carrefour': {
-        backgroundColor: 'red'
-      }
+      '.icon': {}
     };
   },
   dynamicComponents(_tailwindHelpers: TailwindHelpers) {

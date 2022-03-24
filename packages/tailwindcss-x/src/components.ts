@@ -1,6 +1,6 @@
-import { TailwindHelpers } from './types';
+import { DeepPartial, TailwindHelpers } from './types';
 
-export default function ({ theme }: TailwindHelpers) {
+export default function components({ theme }: TailwindHelpers) {
   return {
     '.btn': {
       '--x-size-height': theme('spacing.32'),
@@ -49,3 +49,28 @@ export default function ({ theme }: TailwindHelpers) {
     }
   };
 }
+
+type CSSTreeNode = Partial<CSSStyleDeclaration> & CSSTree;
+
+interface CSSTree {
+  [className: string]: CSSTreeNode;
+}
+
+export type ComponentsDefinition = DeepPartial<ReturnType<typeof components>>;
+
+type Components = ReturnType<typeof components>;
+export type ComponentsDefinition_<CurrentComponents = Components> = {
+  [Key in
+    | keyof CurrentComponents
+    | `--${string}`
+    | `&${string}`]?: Key extends keyof CurrentComponents
+    ? CurrentComponents[Key] extends object
+      ? ComponentsDefinition_<CurrentComponents[Key]>
+      : CurrentComponents[Key]
+    : Key extends keyof CSSStyleDeclaration
+    ? CSSStyleDeclaration[Key]
+    : 'aqui';
+};
+
+type Test = 'something' | string;
+const t: Test = 'something';
