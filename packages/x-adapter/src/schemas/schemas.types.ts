@@ -1,18 +1,21 @@
 import { PropertyPath, PropertyType, Primitive } from '@empathyco/x-utils';
+import { MapperContext } from '../types/index';
 
-type Schema<Source, Target> = {
-  [TargetKey in keyof Target]:
-    | PropertyPath<Source>
-    | ((source: Source) => any)
-    | Schema<Source, Exclude<Target[TargetKey], Function | Primitive>>
-    | {
-        path: PropertyPath<Source>;
-        schema: Schema<
-          Exclude<PropertyType<Source, PropertyPath<Source>>, Function | Primitive>,
-          Target[TargetKey]
-        >;
-      };
+export type Schema<Source, Target> = {
+  [TargetKey in keyof Target]: SchemaTransformer<Source, Target, TargetKey>;
 };
+
+export type SchemaTransformer<Source, Target, TargetKey extends keyof Target> =
+  | PropertyPath<Source>
+  | ((source: Source, context?: MapperContext) => any)
+  | Schema<Source, Exclude<Target[TargetKey], Function | Primitive>>
+  | {
+      path: PropertyPath<Source>;
+      schema: Schema<
+        Exclude<PropertyType<Source, PropertyPath<Source>>, Function | Primitive>,
+        Target[TargetKey]
+      >;
+    };
 
 const source = {
   data: {
