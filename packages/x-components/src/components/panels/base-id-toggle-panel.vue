@@ -8,8 +8,10 @@
 <script lang="ts">
   import Vue from 'vue';
   import { Component, Prop, Watch } from 'vue-property-decorator';
-  import { XOn } from '../decorators/bus.decorators';
   import { NoElement } from '../no-element';
+  import { xComponentMixin } from '../x-component.mixin';
+  import { panelXModule } from '../../x-modules/panels/x-module';
+  import { State } from '../decorators/store.decorators';
   import BaseTogglePanel from './base-toggle-panel.vue';
 
   /**
@@ -27,7 +29,8 @@
   @Component({
     components: {
       BaseTogglePanel
-    }
+    },
+    mixins: [xComponentMixin(panelXModule)]
   })
   export default class BaseIdTogglePanel extends Vue {
     /**
@@ -56,19 +59,13 @@
     @Prop({ required: true })
     public panelId!: string;
 
-    /**
-     * Method to subscribe to the {@link XEventsTypes.UserClickedPanelToggleButton} event.
-     *
-     * @param panelId - The payload of the {@link XEventsTypes.UserClickedPanelToggleButton} event.
-     *
-     * @public
-     */
-    @XOn('UserClickedPanelToggleButton')
-    togglePanel(panelId: string): void {
-      if (this.panelId === panelId) {
-        this.isOpen = !this.isOpen;
-      }
+    @Watch('openPanels')
+    togglePanel(): void {
+      this.isOpen = this.openPanels.includes(this.panelId);
     }
+
+    @State('panel', 'open')
+    public openPanels!: string[];
 
     /**
      * Emits the {@link XEventsTypes.TogglePanelStateChanged} event, when the internal state
