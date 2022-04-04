@@ -33,7 +33,8 @@ export const RootXStoreModule: Module<XModuleState, any> = {
     search: null,
     searchBox: null,
     tagging: null,
-    url: null
+    url: null,
+    panel: null
   }),
   namespaced: true
 };
